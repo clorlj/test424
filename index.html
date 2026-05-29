@@ -11,70 +11,70 @@
 
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             background-image: url(https://images.unsplash.com/photo-1663427929917-333d88949f7a?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8JUVDJUE3JTgwJUVBJUI1JUFDJTIwJUVCJUIwJUIwJUVBJUIyJUJEJUVEJTk5JTk0JUVCJUE5JUI0fGVufDB8fDB8fHww);
             background-size: cover;
             background-position: center;
+            gap: 20px;
+        }
+
+        #daily {
+            font-family: 'Do Hyeon', sans-serif;
+            font-size: 150px;
+            color: #fff;
+            line-height: 1;
+            letter-spacing: 6px;
+            text-shadow: 0 0 30px rgba(255,255,255,0.3);
+        }
+
+        .cards {
+            display: flex;
+            gap: 20px;
         }
 
         .Box {
-            width: 360px;
+            width: 280px;
             border-radius: 24px;
             background: rgba(255, 255, 255, 0.3);
-            
             border: 1px solid rgba(255,255,255,0.35);
             display: flex;
             flex-direction: column;
-            padding: 28px 28px 24px;
-            gap: 0;
+            padding: 24px 22px 20px;
         }
 
-        /* 상단 : 도시명 + 날짜 */
         .top {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: -10px;
+            justify-content: flex-end;
+        }
+
+        .date {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            color: rgba(255,255,255,1);
         }
 
         .city {
             font-family: 'Do Hyeon', sans-serif;
-            font-size: 35px;
-            font-weight: 500;
+            font-size: 66px;
             color: #EC6E4C;
-            letter-spacing: 2px;
+            line-height: 1;
+            letter-spacing: 4px;
+            margin-bottom: 16px;
+            text-align: center;
             text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
         }
 
-        #date {
-            font-family: "DotGothic16", sans-serif;
-            font-weight: 400;
-            font-size: 25px;
-            color: rgba(255,255,255,1);
-            
-        }
-
-        /* 시간 */
-        #daily {
-            font-family: 'Do Hyeon', sans-serif;
-            font-size: 88px;
-            color: #fff;
-            line-height: 1;
-            letter-spacing: 4px;
-            margin-bottom: 20px;
-        }
-
-        /* 구분선 */
         .line {
             width: 100%;
             height: 1px;
             background: rgba(255,255,255,0.2);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
-        /* 아이콘 + 정보 */
         .leftright {
             display: flex;
             align-items: center;
@@ -86,9 +86,9 @@
             justify-content: center;
         }
 
-        #con {
-            width: 150px;
-            height: 150px;
+        .con {
+            width: 110px;
+            height: 110px;
         }
 
         .right {
@@ -97,88 +97,124 @@
             gap: 5px;
         }
 
-        #dis {
+        .dis {
             font-family: 'Do Hyeon', sans-serif;
-            font-size: 32px;
+            font-size: 26px;
             color: #fff;
             line-height: 1.2;
         }
 
-        #wi {
+        .wi {
             font-family: 'Noto Sans KR', sans-serif;
-            font-size: 20px;
-            color: rgba(255,255,255,1);
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
             font-weight: 300;
         }
 
-        #highlow {
+        .highlow {
             font-family: 'Noto Sans KR', sans-serif;
-            font-size: 25px;
-            color: rgba(255,255,255,1);
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
             font-weight: 300;
         }
 
     </style>
 </head>
 <body>
-    <div class="Box">
-        <div class="top">
-            <span class="city">안산시</span>
-            <span id="date"></span>
-        </div>
 
-        <h2 id="daily"></h2>
+    <h1 id="daily"></h1>
 
-        <div class="line"></div>
+    <div class="cards">
 
-
-            <div class="left">
-                <img id="con" alt="날씨아이콘"/>
-            </div>
-            <div class="right">
-                <div id="dis"></div>
-                <div id="wi"></div>
-                <div id="highlow"></div>
+        <div class="Box">
+            <div class="top"><span class="date" id="date"></span></div>
+            <div class="city">서울</div>
+            <div class="line"></div>
+            <div class="leftright">
+                <div class="left"><img class="con" id="con1" alt="아이콘"/></div>
+                <div class="right">
+                    <div class="dis" id="dis1"></div>
+                    <div class="wi" id="wi1"></div>
+                    <div class="highlow" id="hl1"></div>
+                </div>
             </div>
         </div>
+
+        <div class="Box">
+            <div class="top"><span class="date"></span></div>
+            <div class="city">부산</div>
+            <div class="line"></div>
+            <div class="leftright">
+                <div class="left"><img class="con" id="con2" alt="아이콘"/></div>
+                <div class="right">
+                    <div class="dis" id="dis2"></div>
+                    <div class="wi" id="wi2"></div>
+                    <div class="highlow" id="hl2"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="Box">
+            <div class="top"><span class="date"></span></div>
+            <div class="city">대구</div>
+            <div class="line"></div>
+            <div class="leftright">
+                <div class="left"><img class="con" id="con3" alt="아이콘"/></div>
+                <div class="right">
+                    <div class="dis" id="dis3"></div>
+                    <div class="wi" id="wi3"></div>
+                    <div class="highlow" id="hl3"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="Box">
+            <div class="top"><span class="date"></span></div>
+            <div class="city">제주</div>
+            <div class="line"></div>
+            <div class="leftright">
+                <div class="left"><img class="con" id="con4" alt="아이콘"/></div>
+                <div class="right">
+                    <div class="dis" id="dis4"></div>
+                    <div class="wi" id="wi4"></div>
+                    <div class="highlow" id="hl4"></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        let dis    = document.querySelector("#dis")
-        let con    = document.querySelector("#con")
-        let wi     = document.querySelector("#wi")
-        let daily  = document.querySelector("#daily")
-        let dateEl = document.querySelector("#date")
-        let highlow = document.querySelector("#highlow")
-        const API_KEY  = '3caef313b5c72c8eeffaea70357e6ddd'
-        const cityname = 'Ansan'
+        const API_KEY = '3caef313b5c72c8eeffaea70357e6ddd'
 
         function updateClock() {
             let date    = new Date()
             let hours   = date.getHours()   < 10 ? "0" + date.getHours()   : date.getHours()
             let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
-            let month   = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)
+            let month   = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
             let day     = date.getDate() < 10 ? "0" + date.getDate() : date.getDate()
 
-            daily.innerHTML  = hours + ":" + minutes
-            dateEl.innerHTML = date.getFullYear() + "-" + month + "-" + day
+            document.querySelector('#daily').innerHTML = hours + ":" + minutes
+            document.querySelectorAll('.date').forEach(el => el.innerHTML = date.getFullYear() + "-" + month + "-" + day)
         }
 
-        async function getWeather() {
-            let res  = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${API_KEY}&units=metric&lang=kr`)
+        async function getWeather(cityEn, num) {
+            let res  = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityEn}&appid=${API_KEY}&units=metric&lang=kr`)
             let data = await res.json()
 
-            dis.innerHTML     = Math.round(data.main.temp) + "℃  " + data.weather[0].description
-            con.src           = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-            wi.innerHTML      = "💨 풍속 " + data.wind.speed + "m/s"
-            highlow.innerHTML = "최고 " + Math.round(data.main.temp_max) + "° / 최저 " + Math.round(data.main.temp_min) + "°"
-
-            console.log(data)
+            document.querySelector(`#con${num}`).src      = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+            document.querySelector(`#dis${num}`).innerHTML = Math.round(data.main.temp) + "℃  " + data.weather[0].description
+            document.querySelector(`#wi${num}`).innerHTML  = "💨 " + data.wind.speed + "m/s"
+            document.querySelector(`#hl${num}`).innerHTML  = "최고 " + Math.round(data.main.temp_max) + "° / 최저 " + Math.round(data.main.temp_min) + "°"
         }
 
         updateClock()
         setInterval(updateClock, 1000)
-        getWeather()
+
+        getWeather('Seoul', 1)
+        getWeather('Busan', 2)
+        getWeather('Daegu', 3)
+        getWeather('Jeju', 4)
     </script>
 </body>
 </html>
