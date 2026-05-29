@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테무 우딘HAUS 스토리</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        body{ padding-top: 100px; margin: 0; }
+        a{ text-decoration: none; color: inherit; background-color: transparent; }
+
+        nav{ position: fixed; top: 0; left: 0; width: 100%; height: 100px; z-index: 9999; background-color: #f9f9f9; border-bottom: 1px solid #eaeaea; box-shadow: 0 10px 15px rgba(0,0,0,0.05); overflow: hidden; transition: height 0.4s ease; }
+        nav:hover { height: 320px; }
+        .gnb{ display: flex; justify-content: start; align-items: flex-start; padding: 36px 0 60px 0; }
+        .logo{ padding: 0 140px 0 100px; display: flex; align-items: center; }
+        .logo img{ height: 28px; object-fit: contain; }
+        .menu-container{ display: flex; gap: 200px; }
+        .menu{ display: flex; flex-direction: column; gap: 35px; }
+        .sub-title { font-weight: bold; font-size: 18px; margin-bottom: 5px; color: #000; }
+        .snb { display: flex; flex-direction: column; gap: 12px; }
+        .snb a { color: #777; font-size: 16px; transition: 0.2s; }
+        .snb a:hover { color: #000000; text-decoration: underline; }
+
+        .scroll-section { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .scroll-section.on { opacity: 1; transform: translateY(0); }
+
+        .background-white { width: 100%; padding: 120px 10%; box-sizing: border-box; background-color: #ffffff; font-family: "Noto Sans KR", sans-serif; }
+        .right-category { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 80px; }
+        .right-category h2 { font-size: 17px; color: #505050; font-weight: 300; margin: 0; }
+        .white-title { display: flex; justify-content: center; align-items: baseline; gap: 15px; margin-bottom: 80px; }
+        .whmain-title { font-size: 65px; font-weight: bold; color: #111; margin: 0; }
+        .whsub-title { font-size: 24px; font-weight: bold; color: #555; margin: 0; }
+        .sns-media { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .media-bar { font-size: 22px; font-weight: bold; color: #111; margin: 0 0 30px 0; }
+        .sns-icons-wrap { display: flex; gap: 10px; }
+        .sns-icon { width: 35px; height: 35px; border-radius: 50%; background-color: #111; background-position: center; background-repeat: no-repeat; cursor: pointer; }
+        .sns-mediaBox { display: flex; justify-content: space-between; gap: 50px; width: 100%; padding-bottom: 220px; }
+        .mediaBox-img { flex: 1; aspect-ratio: 1/1; border-radius: 10px; background-size: cover; background-position: center; background-repeat: no-repeat; background-color: #ddd; position: relative; overflow: hidden; cursor: pointer; }
+        .hover-box { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; color: #fff; text-align: center; }
+        .mediaBox-img:hover .hover-box { opacity: 1; }
+        .hover-tag { font-size: 14px; margin-bottom: 10px; }
+        .hover-view { font-size: 16px; font-weight: bold; border-top: 1px solid #fff; padding-top: 10px; }
+
+        .youtube-section { width: 100%; padding: 120px 0; box-sizing: border-box; font-family: "Noto Sans KR", sans-serif; }
+        .yt-slider-wrap { width: 100%; overflow: hidden; }
+        .yt-slider-track { display: flex; gap: 20px; transition: transform 0.4s ease; }
+        .media-place { width: 408px; flex-shrink: 0; cursor: pointer; padding: 10px 0; }
+        .Thumbnail { width: 100%; height: 240px; background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 8px; margin-bottom: 15px; border: 1px solid #eaeaea; }
+        .post-title { font-size: 24px; color: #333; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .post-date { font-size: 18px; color: #999; }
+        .yt-controls { display: flex; justify-content: flex-end; align-items: center; gap: 15px; margin-top: 30px; }
+        .yt-controls button { background: none; border: none; font-size: 24px; color: #555; cursor: pointer; font-weight: 300; }
+        .yt-line { width: 1px; height: 14px; background-color: #ccc; }
+
+        .bottom-section { display: flex; align-items: center; width: 100%; padding: 50px 100px; background-color: #000000; box-sizing: border-box; font-family: "Noto Sans KR", sans-serif; }
+        .logo-section { margin-right: 40px; }
+        .woodin-logo { width: 150px; height: 30px; background-image: url('https://www.wood.co.kr/images/common/logo2.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .line4 { width: 1px; height: 80px; background-color: #333333; margin-right: 40px; }
+        .caption-Box { display: flex; flex-direction: column; justify-content: center; }
+        .ex-bottom { font-size: 17px; color: #888888; font-weight: 300; margin: 6px 0; letter-spacing: 0.5px; }
+        .teil-Box { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; }
+        .teil-Box .ex-bottom { color: #aaaaaa; margin-bottom: 20px; word-spacing: 10px; }
+        .sns-wrap { display: flex; gap: 10px; }
+        .icon-space2 { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #555555; background-size: 20px; background-repeat: no-repeat; background-position: center; cursor: pointer; }
+        .icon-space2:hover { border-color: #ffffff; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="gnb">
+            <a href="main.html" class="logo"><img src="https://www.wood.co.kr/images/common/logo.png" alt="로고"></a>
+            <div class="menu-container">
+                <div class="menu"><a href="b.html" class="sub-title">브랜드</a><ul class="snb"><li><a href="#">브랜드스토리</a></li><li><a href="#">연혁 및 인증</a></li><li><a href="#">CI&BI</a></li><li><a href="#">오시는길</a></li></ul></div>
+                <div class="menu"><a href="s.html" class="sub-title">스토리</a><ul class="snb"><li><a href="#">미디어</a></li><li><a href="#">홍보</a></li><li><a href="#">협찬</a></li><li><a href="#">이벤트</a></li></ul></div>
+                <div class="menu"><a href="g.html" class="sub-title">갤러리</a><ul class="snb"><li><a href="#">컬렉션</a></li><li><a href="#">인테리어</a></li><li><a href="#">익스테리어</a></li></ul></div>
+                <div class="menu"><a href="m.html" class="sub-title">쇼룸</a><ul class="snb"><li><a href="#">전시장</a></li></ul></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="background-white">
+        <div class="right-category scroll-section">
+            <h2 class="right-category1">WOODIN</h2>
+            <h2 class="right-category2">스토리</h2>
+            <h2 class="right-category3">미디어</h2>
+        </div>
+
+        <div class="white-header scroll-section">
+            <div class="white-title">
+                <h2 class="whmain-title">SNS</h2>
+                <h2 class="whsub-title">미디어</h2>
+            </div>
+            <div class="sns-media">
+                <h2 class="media-bar">INSTAGRAM</h2>
+                <div class="sns-icons-wrap">
+                    <div class="sns-icon" style="background-image: url('https://www.wood.co.kr/images/page/m121_sns1.png');"></div>
+                    <div class="sns-icon" style="background-image: url('https://www.wood.co.kr/images/page/m121_sns2.png');"></div>
+                    <div class="sns-icon" style="background-image: url('https://www.wood.co.kr/images/page/m121_sns3.png');"></div>
+                </div>
+            </div>
+            <div class="sns-mediaBox">
+                <a href="https://www.instagram.com/p/DXalb8ck17-/" class="mediaBox-img" style="background-image: url('https://www.wood.co.kr/data/sns/file1_177683703478ctxe1l04.jpg');"><div class="hover-box"><div class="hover-tag">#보드 #힐링월 #인테리어</div><div class="hover-view">VIEW MORE +</div></div></a>
+                <a href="https://www.instagram.com/p/DXGtw8gGBQ2/" class="mediaBox-img" style="background-image: url('https://www.wood.co.kr/data/sns/file1_1776154850xh21vmgfyc.jpg');"><div class="hover-box"><div class="hover-tag">#시공사례 #인테리어필름</div><div class="hover-view">VIEW MORE +</div></div></a>
+                <a href="https://www.instagram.com/p/DW8dPbJGOYx/" class="mediaBox-img" style="background-image: url('https://www.wood.co.kr/data/sns/file1_1776143363ol0hg849fn.jpg');"><div class="hover-box"><div class="hover-tag">#펫도어 #펫테리어</div><div class="hover-view">VIEW MORE +</div></div></a>
+            </div>
+        </div>
+
+        <!-- YOUTUBE (오류 수정: id를 ytTrack1로) -->
+        <div class="youtube-section scroll-section">
+            <h2 class="media-bar">YOUTUBE</h2>
+            <div class="yt-slider-wrap">
+                <div class="yt-slider-track" id="ytTrack1">
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1771494982fvgg4aolym.jpg');"></div><div class="post-title">대전에 가면 반드시 봐야 할 단 하나의 건축물│대전 보문산 큰나무 전망대│우딘 중목구조</div><div class="post-date">2026-02-19</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1771494945pmukzayi35.png');"></div><div class="post-title">공간의 완성도를 높이는 창의 기준 │ 우딘 독일시스템창호 시공사례</div><div class="post-date">2026-02-19</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1765874887sg95k5652s.png');"></div><div class="post-title">SINCE 1982, 시간이 만들어낸 가치 #공장 #인테리어</div><div class="post-date">2025-12-16</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1765874832hebba45m4s.png');"></div><div class="post-title">도심과 자연을 잇는 다리, 커넥천 파빌리온</div><div class="post-date">2025-12-16</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_17627625453r2hhndq1y.png');"></div><div class="post-title">"추운 건 못 참아!" 인류가 따뜻함에 집착한 진짜 이유 / 인테리어연대기</div><div class="post-date">2025-11-10</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1748596164fzspzl1jki.png');"></div><div class="post-title">"방금, 눈 마주치셨죠?" 반려동물과 공존하기 위해 집이 바뀌어온 방식 / 인테리어연대기</div><div class="post-date">2025-05-30</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1740628613k65uixy3qc.jpg');"></div><div class="post-title">시공부터 A/S까지 완벽하게 퀄리티 췍↗│믿고 맡기는 우딘 독일 시스템창호 시공 현장🏡</div><div class="post-date">2025-02-27</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1732865025dzrw32kagi.jpg');"></div><div class="post-title">네가 뭘 좋아할지 몰라서 다 준비했어!│우딘 뎁스도어 & 스텝도어</div><div class="post-date">2024-11-29</div></div>
+                </div>
+            </div>
+            <div class="yt-controls">
+                <button onclick="ytPrev(1)">&lt;</button>
+                <div class="yt-line"></div>
+                <button onclick="ytNext(1)">&gt;</button>
+            </div>
+        </div>
+
+        <!-- BLOG (오류 수정: id를 ytTrack2로) -->
+        <div class="youtube-section scroll-section">
+            <h2 class="media-bar">BLOG</h2>
+            <div class="yt-slider-wrap">
+                <div class="yt-slider-track" id="ytTrack2">
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_17785513864cx7rkzm17.png');"></div><div class="post-title">손대지 않아도 되는 편리함, 자동문 중문</div><div class="post-date">2026-05-12</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1776674086buxaitq2cd.jpg');"></div><div class="post-title">프레임 없이 완성되는 개방감, 프레임리스&프레임리스 슬라이딩</div><div class="post-date">2026-04-20</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1776145334kp25wdfk8s.jpg');"></div><div class="post-title">하나의 문, 두 개의 라이프</div><div class="post-date">2026-04-14</div></div>
+                    <div class="media-place"><div class="Thumbnail" style="background-image: url('https://www.wood.co.kr/data/media/file1_1776145088jza1w83q6l.jpg');"></div><div class="post-title">당진 - 삼정중문도어 우딘 전시장 소개</div><div class="post-date">2026-04-14</div></div>
+                </div>
+            </div>
+            <div class="yt-controls">
+                <button onclick="ytPrev(2)">&lt;</button>
+                <div class="yt-line"></div>
+                <button onclick="ytNext(2)">&gt;</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="logo-section"><div class="woodin-logo"></div></div>
+        <div class="line4"></div>
+        <div class="caption-Box">
+            <h2 class="ex-bottom">사업자등록번호 137.81.48926 | ADD 인천 서구 북항로 54 (원창동 381-118)</h2>
+            <h2 class="ex-bottom">TEL 032-583-0160 | FAX 032-583-0161</h2><br>
+            <h2 class="ex-bottom">COPYRIGHT Ⓒ 2022(주)우딘 RIGHTS RESERVED.</h2>
+        </div>
+        <div class="teil-Box">
+            <h2 class="ex-bottom">개인정보보호정책 이메일무단수집거부</h2>
+            <div class="sns-wrap">
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns1.png');"></div>
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns2.png');"></div>
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns3.png');"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 슬라이더 (ytTrack1, ytTrack2 각각 관리)
+        const ytIndexes = { 1: 0, 2: 0 }
+        const ytTotals  = { 1: 8, 2: 4 }
+        const visible   = 4
+
+        function ytNext(n) {
+            if (ytIndexes[n] < ytTotals[n] - visible) { ytIndexes[n]++; updateYtSlider(n); }
+        }
+        function ytPrev(n) {
+            if (ytIndexes[n] > 0) { ytIndexes[n]--; updateYtSlider(n); }
+        }
+        function updateYtSlider(n) {
+            const track = document.getElementById('ytTrack' + n)
+            const itemWidth = track.children[0].offsetWidth
+            track.style.transform = `translateX(-${ytIndexes[n] * (itemWidth + 20)}px)`
+        }
+
+        // 스크롤 이벤트
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('on'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.scroll-section').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

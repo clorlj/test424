@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테무 우딘HAUS 쇼룸</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300..800&family=Black+Han+Sans&family=Do+Hyeon&family=DotGothic16&family=Gamja+Flower&family=Grandiflora+One&family=Gugi&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Single+Day&display=swap" rel="stylesheet">
+    <style>
+        body { padding-top: 100px; margin: 0; font-family: "Noto Sans KR", sans-serif; }
+        a { text-decoration: none; color: inherit; background-color: transparent; }
+
+        /* ── NAV ── */
+        nav { position: fixed; top: 0; left: 0; width: 100%; height: 100px; z-index: 9999; background-color: #f9f9f9; border-bottom: 1px solid #eaeaea; box-shadow: 0 10px 15px rgba(0,0,0,0.05); overflow: hidden; transition: height 0.4s ease; }
+        nav:hover { height: 320px; }
+        .gnb { display: flex; justify-content: start; align-items: flex-start; padding: 36px 0 60px 0; }
+        .logo { padding: 0 140px 0 100px; display: flex; align-items: center; }
+        .logo img { height: 28px; object-fit: contain; }
+        .menu-container { display: flex; gap: 200px; }
+        .menu { display: flex; flex-direction: column; gap: 35px; }
+        .sub-title { font-weight: bold; font-size: 18px; margin-bottom: 5px; color: #000; }
+        .snb { display: flex; flex-direction: column; gap: 12px; }
+        .snb a { color: #777; font-size: 16px; transition: 0.2s; }
+        .snb a:hover { color: #000; text-decoration: underline; }
+
+        /* ── PAGE & CATEGORY ── */
+        .page { padding-bottom: 100px; }
+        .right-category { display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 100px 200px 100px; }
+        .right-category h2 { font-size: 17px; color: #505050; font-weight: 300; margin: 0; }
+
+        .hero-header { padding: 60px 0 160px; text-align: center; }
+        .hero-header h1 { font-size: 65px; font-weight: bold; color: #111; display: inline-flex; align-items: baseline; gap: 15px; margin: 0; }
+        .hero-header h1 span { font-size: 24px; font-weight: bold; color: #555; }
+
+        /* ── MAIN SECTION ── */
+        .main-section { display: grid; grid-template-columns: 5fr 7fr; width: 100%; height: 100vh; padding: 0px 60px; gap: 30px; box-sizing: border-box; }
+        .img-left { position: relative; overflow: hidden; border-right: 1px solid #e0e0e0; border-radius: 12px; width: 490px; height: 800px; margin: 0 0 0 250px; }
+        .img-left img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s ease; }
+        .img-left:hover img { transform: scale(1.04); }
+        .right-col { display: flex; flex-direction: column; }
+        .img-right-top { position: relative; overflow: hidden; border-bottom: 1px solid #e0e0e0; border-radius: 12px; width: 890px; height: 420px; }
+        .img-right-top img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s ease; }
+        .img-right-top:hover img { transform: scale(1.04); }
+        .text-area { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 48px 56px; background: #fff; }
+        .text-area .label { font-size: 12px; font-weight: 500; letter-spacing: 3px; color: #888; margin-bottom: 24px; }
+        .text-area .headline { font-size: 38px; font-weight: 200; line-height: 1.45; color: #111; margin-bottom: 20px; word-break: keep-all; }
+        .text-area .divider { width: 36px; height: 1px; background: #111; margin-bottom: 20px; }
+        .text-area .desc { font-size: 15px; font-weight: 300; color: #777; line-height: 1.8; word-break: keep-all; }
+
+        /* ── LOCATION SECTION (우딘전시장) ── */
+        .location-section { 
+            max-width: 1360px; 
+            margin: 150px auto 50px; 
+            padding: 0 40px; 
+            box-sizing: border-box;
+        }
+        .section-title { font-size: 32px; font-weight: bold; color: #111; margin-bottom: 40px; }
+        
+        .info-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+        .info-left { display: flex; align-items: center; gap: 50px; }
+        .info-group { display: flex; align-items: center; gap: 15px; }
+        .info-label { font-size: 15px; font-weight: 700; color: #111; letter-spacing: 1px; }
+        .info-text { font-size: 15px; color: #666; }
+
+        .naver-btn { 
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 14px 30px; background: #03c75a; color: #fff; 
+            font-size: 15px; font-weight: 500; border-radius: 4px; transition: background 0.3s;
+        }
+        .naver-btn:hover { background: #02b350; }
+        .naver-btn .n-icon { font-weight: 900; margin-right: 8px; font-size: 17px; }
+
+        /* 카카오맵 외곽 라운드 컨테이너 생성 */
+        .map-container { width: 100%; border-radius: 12px; overflow: hidden; background: #f9f9f9; }
+        .map-container iframe, .map-container img { display: block; border: none !important; }
+
+        /* ── FOOTER ── */
+        .bottom-section { display: flex; align-items: center; width: 100%; padding: 50px 100px; background-color: #000; box-sizing: border-box; }
+        .logo-section { margin-right: 40px; }
+        .woodin-logo { width: 150px; height: 30px; background-image: url('https://www.wood.co.kr/images/common/logo2.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .line4 { width: 1px; height: 80px; background-color: #333; margin-right: 40px; }
+        .caption-Box { display: flex; flex-direction: column; justify-content: center; }
+        .ex-bottom { font-size: 17px; color: #888; font-weight: 300; margin: 6px 0; letter-spacing: 0.5px; }
+        .teil-Box { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; }
+        .teil-Box .ex-bottom { color: #aaa; margin-bottom: 20px; word-spacing: 10px; }
+        .sns-wrap { display: flex; gap: 10px; }
+        .icon-space2 { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #555; background-size: 20px; background-repeat: no-repeat; background-position: center; cursor: pointer; }
+        .icon-space2:hover { border-color: #fff; }
+
+        .scroll-section { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.scroll-section.on { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="gnb">
+            <a href="./main.html" class="logo">
+                <img src="https://www.wood.co.kr/images/common/logo.png" alt="로고">
+            </a>
+            <div class="menu-container">
+                <div class="menu">
+                    <a href="./b.html" class="sub-title">브랜드</a>
+                    <ul class="snb">
+                        <li><a href="#">브랜드스토리</a></li>
+                        <li><a href="#">연혁 및 인증</a></li>
+                        <li><a href="#">CI&BI</a></li>
+                        <li><a href="#">오시는길</a></li>
+                    </ul>
+                </div>
+                <div class="menu">
+                    <a href="./s.html" class="sub-title">스토리</a>
+                    <ul class="snb">
+                        <li><a href="#">미디어</a></li>
+                        <li><a href="#">홍보</a></li>
+                        <li><a href="#">협찬</a></li>
+                        <li><a href="#">이벤트</a></li>
+                    </ul>
+                </div>
+                <div class="menu">
+                    <a href="./g.html" class="sub-title">갤러리</a>
+                    <ul class="snb">
+                        <li><a href="#">컬렉션</a></li>
+                        <li><a href="#">인테리어</a></li>
+                        <li><a href="#">익스테리어</a></li>
+                    </ul>
+                </div>
+                <div class="menu">
+                    <a href="./m.html" class="sub-title">쇼룸</a>
+                    <ul class="snb">
+                        <li><a href="#">전시장</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page">
+        <div class="right-category">
+            <h2 class="right-category1">WOODIN</h2>
+            <h2 class="right-category2">쇼룸</h2>
+        </div>
+
+        <div class="hero-header">
+            <h1>SHOWROOM <span>쇼룸</span></h1>
+        </div>
+
+        <div class="main-section">
+            <div class="img-left">
+                <img src="https://www.wood.co.kr/images/page/m14_img1.jpg">
+            </div>
+            <div class="right-col">
+                <div class="img-right-top">
+                    <img src="https://www.wood.co.kr/images/page/m14_img2.jpg">
+                </div>
+                <div class="text-area">
+                    <p class="label">WOODIN HAUS SHOWROOM</p>
+                    <h2 class="headline">손이 닿는 모든 곳,<br>눈길이 닿는 모든 곳에<br>건강함이 머뭅니다</h2>
+                    <div class="divider"></div>
+                    <p class="desc">당신의 가장 건강한 공간을 위해 우딘의 제품을 직접 눈으로 보고 만져보세요.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="location-section">
+            <h2 class="section-title">우딘전시장</h2>
+            
+            <div class="info-row">
+                <div class="info-left">
+                    <div class="info-group">
+                        <span class="info-label">ADDRESS</span>
+                        <span class="info-text">인천 서구 북항로 122 (원창동 391-33) 3F</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">BUSINESS HOURS</span>
+                        <span class="info-text">08:00~18:00 (주차가능)</span>
+                    </div>
+                </div>
+                <a href="https://booking.naver.com/booking/6/bizes/605658" class="naver-btn"><span class="n-icon">N</span> 네이버 예약 </a>
+            </div>
+
+            <div class="map-container">
+                <div style="font:normal normal 400 12px/normal dotum, sans-serif; width:100%; max-width:1360px; height:512px; color:#333; position:relative">
+                    <div style="height: 480px;">
+                        <a href="https://map.kakao.com/?urlX=419247.0000000019&amp;urlY=1113337.0000000007&amp;itemId=165301881&amp;q=%EC%9A%B0%EB%94%98%ED%95%98%EC%9A%B0%EC%8A%A4%20%EC%A0%84%EC%8B%9C%EC%9E%A5&amp;srcid=165301881&amp;map_type=TYPE_MAP&amp;from=roughmap" target="_blank">
+                            <img class="map" src="http://t1.daumcdn.net/roughmap/imgmap/0b1368912fac6d93cd7f465be587294c40fbfd5ef2d9fbb52710a1e0443ba857" width="100%" height="478px">
+                        </a>
+                    </div>
+                    <div style="overflow: hidden; padding: 7px 11px; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 0px 0px 2px 2px; background-color: rgb(249, 249, 249);">
+                        <a href="https://map.kakao.com" target="_blank" style="float: left;">
+                            <img src="//t1.kakaocdn.net/localimg/localimages/07/2018/pc/common/logo_kakaomap.png" width="72" height="16" alt="카카오맵" style="display:block;width:72px;height:16px">
+                        </a>
+                        <div style="float: right; position: relative; top: 1px; font-size: 11px;">
+                            <a target="_blank" href="https://map.kakao.com/?from=roughmap&amp;srcid=165301881&amp;confirmid=165301881&amp;q=%EC%9A%B0%EB%94%98%ED%95%98%EC%9A%B0%EC%8A%A4%20%EC%A0%84%EC%8B%9C%EC%9E%A5&amp;rv=on" style="float:left;height:15px;padding-top:1px;line-height:15px;color:#000;text-decoration: none;">로드뷰</a>
+                            <span style="width: 1px;padding: 0;margin: 0 8px 0 9px;height: 11px;vertical-align: top;position: relative;top: 2px;border-left: 1px solid #d0d0d0;float: left;"></span>
+                            <a target="_blank" href="https://map.kakao.com/?from=roughmap&amp;eName=%EC%9A%B0%EB%94%98%ED%95%98%EC%9A%B0%EC%8A%A4%20%EC%A0%84%EC%8B%9C%EC%9E%A5&amp;eX=419247.0000000019&amp;eY=1113337.0000000007" style="float:left;height:15px;padding-top:1px;line-height:15px;color:#000;text-decoration: none;">길찾기</a>
+                            <span style="width: 1px;padding: 0;margin: 0 8px 0 9px;height: 11px;vertical-align: top;position: relative;top: 2px;border-left: 1px solid #d0d0d0;float: left;"></span>
+                            <a target="_blank" href="https://map.kakao.com?map_type=TYPE_MAP&amp;from=roughmap&amp;srcid=165301881&amp;itemId=165301881&amp;q=%EC%9A%B0%EB%94%98%ED%95%98%EC%9A%B0%EC%8A%A4%20%EC%A0%84%EC%8B%9C%EC%9E%A5&amp;urlX=419247.0000000019&amp;urlY=1113337.0000000007" style="float:left;height:15px;padding-top:1px;line-height:15px;color:#000;text-decoration: none;">지도 크게 보기</a>
+                        </div>
+                    </div>
+                    <div><span style="border-bottom:0px none #333333;position:absolute;left:-25px;top:-136px;width:0px;height:40px"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="logo-section">
+            <div class="woodin-logo"></div>
+        </div>
+        <div class="line4"></div>
+        <div class="caption-Box">
+            <h2 class="ex-bottom">사업자등록번호 137.81.48926 | ADD 인천 서구 북항로 54 (원창동 381-118)</h2>
+            <h2 class="ex-bottom">TEL 032-583-0160 | FAX 032-583-0161</h2>
+            <br>
+            <h2 class="ex-bottom">COPYRIGHT Ⓒ 2022(주)우딘 RIGHTS RESERVED.</h2>
+        </div>
+        <div class="teil-Box">
+            <h2 class="ex-bottom">개인정보보호정책 이메일무단수집거부</h2>
+            <div class="sns-wrap">
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns1.png');"></div>
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns2.png');"></div>
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns3.png');"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('on'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.scroll-section').forEach(el => observer.observe(el));
+</script>
+    
+</body>
+</html>

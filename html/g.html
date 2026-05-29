@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테무 우딘HAUS 갤러리</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300..800&family=Black+Han+Sans&family=Do+Hyeon&family=DotGothic16&family=Gamja+Flower&family=Grandiflora+One&family=Gugi&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Single+Day&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <style>
+        body {
+            padding-top: 100px; 
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none; 
+            color: inherit;
+            background-color: transparent;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: 9999;
+            background-color: #f9f9f9; 
+            border-bottom: 1px solid #eaeaea; 
+            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: height 0.4s ease;
+        }
+
+        nav:hover {
+            height: 320px;
+        }
+
+        .gnb {
+            display: flex;
+            justify-content: start;
+            align-items: flex-start; 
+            padding: 36px 0 60px 0; 
+        }
+
+        .logo {
+            padding: 0 140px 0 100px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .menu-container {
+            display: flex;
+            gap: 200px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+
+        .sub-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .snb {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .snb a {
+            color: #777;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .snb a:hover {
+            color: #000000;
+            text-decoration: underline;
+        }
+
+        .background-white {
+            width: 100%;
+            padding: 80px 10%;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            font-family: "Noto Sans KR", sans-serif;
+        }
+
+        .right-category {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 140px;
+        }
+
+        .right-category h2 {
+            font-size: 17px;
+            color: #888;
+            font-weight: 300;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .right-category1::after,
+        .right-category2::after {
+            content: '|';
+            margin-left: 10px;
+            color: #ddd;
+            font-size: 12px;
+        }
+
+        .white-title {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 15px;
+            margin-bottom: 140px;
+        }
+
+        .whmain-title {
+            font-size: 65px;
+            font-weight: bold;
+            color: #111;
+            margin: 0;
+        }
+
+        .whsub-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #555;
+            margin: 0;
+        }
+
+        .collection-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .collection-item {
+            width: 31.5%;
+            height: 700px;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #ddd;
+            position: relative; 
+            overflow: hidden; 
+            cursor: pointer;
+        }
+
+        .hover-box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; 
+            transition: opacity 0.3s ease;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .collection-item:hover .hover-box {
+            opacity: 1;
+        }
+
+        .hover-tag {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 350;
+        }
+
+        .hover-view {
+            font-size: 16px;
+            font-weight: 300;
+            border-top: 1px solid #fff;
+            padding-top: 15px;
+            letter-spacing: 1px;
+        }
+
+        .bottom-section {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 50px 100px;
+            background-color: #000000;
+            box-sizing: border-box;
+            font-family: "Noto Sans KR", sans-serif;
+        }
+
+        .logo-section {
+            margin-right: 40px;
+        }
+
+        .woodin-logo {
+            width: 150px;
+            height: 30px;
+            background-image: url('https://www.wood.co.kr/images/common/logo2.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .line4 {
+            width: 1px;
+            height: 80px;
+            background-color: #333333;
+            margin-right: 40px;
+        }
+
+        .caption-Box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .ex-bottom {
+            font-size: 17px;
+            color: #888888;
+            font-weight: 300;
+            margin: 6px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .teil-Box {
+            margin-left: auto; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; 
+        }
+
+        .teil-Box .ex-bottom {
+            color: #aaaaaa;
+            margin-bottom: 20px;
+            word-spacing: 10px; 
+        }
+
+        .sns-wrap {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-space2 {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #555555;
+            background-size: 20px;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+        }
+
+        .icon-space2:hover {
+            border-color: #ffffff;
+        }
+
+        .scroll-section { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.scroll-section.on { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="gnb">
+            <a href="./main.html" class="logo">
+                <img src="https://www.wood.co.kr/images/common/logo.png" alt="로고">
+            </a>
+            
+            <div class="menu-container">
+                <div class="menu">
+                    <a href="./b.html" class="sub-title">브랜드</a>
+                    <ul class="snb">
+                        <li><a href="#">브랜드스토리</a></li>
+                        <li><a href="#">연혁 및 인증</a></li>
+                        <li><a href="#">CI&BI</a></li>
+                        <li><a href="#">오시는길</a></li>
+                    </ul>
+                </div>
+                <div class="menu">
+                    <a href="./s.html" class="sub-title">스토리</a>
+                    <ul class="snb">
+                        <li><a href="#">미디어</a></li>
+                        <li><a href="#">홍보</a></li>
+                        <li><a href="#">협찬</a></li>
+                        <li><a href="#">이벤트</a></li>
+                    </ul>
+                </div>
+                <div class="menu">
+                    <a href="./g.html" class="sub-title">갤러리</a>
+                    <ul class="snb">
+                        <li><a href="#">컬렉션</a></li>
+                        <li><a href="#">인테리어</a></li>
+                        <li><a href="#">익스테리어</a></li>
+                    </ul>
+                </div>
+                <div class="menu">
+                    <a href="./m.html" class="sub-title">쇼룸</a>
+                    <ul class="snb">
+                        <li><a href="#">전시장</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="background-white">
+        <div class="right-category">
+            <h2 class="right-category1">WOODIN</h2>
+            <h2 class="right-category2">갤러리</h2>
+            <h2 class="right-category3">컬렉션</h2>
+        </div>
+        
+        <div class="white-title">
+            <h2 class="whmain-title">COLLECTION</h2>
+            <h2 class="whsub-title">컬렉션</h2>
+        </div>
+        
+        <div class="collection-wrap">
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1645503685smsrrjx6u5.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">레이어드홈</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1645324059681euyug3c.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">거실 인테리어 01</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_16453239235xzzltlfzr.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">거실 인테리어 02</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1645324291skf25y867d.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">혼자 사는 01</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_164800406932cb6iy4nd.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">혼자 사는 02</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1648003448x2eo9qc5u6.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">신혼부부 01</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1648002793up7t9f51q9.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">신혼부부 02</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1648002386iejf6q4r9d.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">패밀리테리어 01</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1648000134n1z00666r2.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">패밀리테리어 02</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1647921957ceowuyspof.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">라미란 작업실 01</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1647922322qyfr2jk3cj.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">라미란 작업실 02</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+            <div class="collection-item" style="background-image: url('https://www.wood.co.kr/data/collection/file1_1647923491iec41r9vi8.jpg');">
+                <div class="hover-box">
+                    <div class="hover-tag">송은석 자택 협찬</div>
+                    <div class="hover-view">VIEW MORE +</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="logo-section">
+            <div class="woodin-logo"></div>
+        </div>
+        <div class="line4"></div>
+        <div class="caption-Box">
+            <h2 class="ex-bottom">사업자등록번호 137.81.48926 | ADD 인천 서구 북항로 54 (원창동 381-118)</h2>
+            <h2 class="ex-bottom">TEL 032-583-0160 | FAX 032-583-0161</h2>
+            <br>
+            <h2 class="ex-bottom">COPYRIGHT Ⓒ 2022(주)우딘 RIGHTS RESERVED.</h2>
+        </div>
+        <div class="teil-Box">
+            <h2 class="ex-bottom">개인정보보호정책 이메일무단수집거부</h2>
+            <div class="sns-wrap">
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns1.png');"></div>
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns2.png');"></div>
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns3.png');"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('on'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.scroll-section').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

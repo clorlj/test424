@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테무 우딘HAUS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300..800&family=Black+Han+Sans&family=Do+Hyeon&family=DotGothic16&family=Gamja+Flower&family=Grandiflora+One&family=Gugi&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Single+Day&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <style>
+        body{ padding-top: 100px; margin: 0; }
+        a{ text-decoration: none; color: inherit; background-color: transparent; }
+
+        nav{ position: fixed; top: 0; left: 0; width: 100%; height: 100px; z-index: 9999; background-color: #f9f9f9; border-bottom: 1px solid #eaeaea; box-shadow: 0 10px 15px rgba(0,0,0,0.05); overflow: hidden; transition: height 0.4s ease; }
+        nav:hover { height: 320px; }
+        .gnb{ display: flex; justify-content: start; align-items: flex-start; padding: 36px 0 60px 0; }
+        .logo{ padding: 0 140px 0 100px; display: flex; align-items: center; }
+        .logo img{ height: 28px; object-fit: contain; }
+        .menu-container{ display: flex; gap: 200px; }
+        .menu{ display: flex; flex-direction: column; gap: 35px; }
+        .sub-title { font-weight: bold; font-size: 18px; margin-bottom: 5px; color: #000; }
+        .snb { display: flex; flex-direction: column; gap: 12px; }
+        .snb a { color: #777; font-size: 16px; transition: 0.2s; }
+        .snb a:hover { color: #000000; text-decoration: underline; }
+
+        .main-box { width: 100%; height: calc(100vh - 100px); display: flex; justify-content: center; align-items: center; }
+        .main-img { width: 95%; height: 90%; display: flex; justify-content: center; align-items: center; background-image: url('https://www.wood.co.kr/data/main/file1_16450763511qly671qvc.jpg'); background-size: cover; background-position: center; border-radius: 10px; position: relative; overflow: hidden; }
+        .door { position: absolute; top: 0; width: 50%; height: 100%; background-color: #ffffff; transition: transform 1.2s ease-in-out; z-index: 10; }
+        .door.left { left: 0; }
+        .door.right { right: 0; }
+        .main-img.on .door.left { transform: translateX(-100%); }
+        .main-img.on .door.right { transform: translateX(100%); }
+        .htitle { color: #eaeaea; z-index: 5; font-family: "Noto Sans KR", sans-serif; font-weight: 100; font-size: 70px; text-align: center; position: relative; transform: translateY(30px); opacity: 0; transition: all 1.2s; transition-delay: 1.0s; }
+        .main-img.on .htitle { transform: translateY(0); transition-delay: 1.0s; opacity: 1; }
+
+        /* 스크롤 섹션 공통 */
+        .scroll-section { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .scroll-section.on { opacity: 1; transform: translateY(0); }
+
+        .second-box { display: flex; width: 100%; height: 100vh; overflow: hidden; }
+        .left-box { width: 50%; display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 0 50px; text-align: center; font-family: "Noto Sans KR", sans-serif; font-weight: 100; }
+        .sub-title2 { font-size: 18px; color: #333; margin-bottom: 20px; font-weight: normal; }
+        .main-title { font-size: 55px; font-weight: 200; line-height: 1.3; color: #111; }
+        .line1 { width: 50px; height: 1px; background-color: #111; margin: 30px auto; }
+        .sub-ex { font-size: 18px; font-weight: 300; line-height: 1.6; color: #555; }
+        .second-img { width: 50%; background-image: url('https://www.wood.co.kr/data/main/file1_1644378955plisylqeof.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; border-radius: 20px; border: 1px solid #9b9b9b; overflow: hidden; transition: background-size 0.5s; }
+        .second-img:hover { background-size: 120%; }
+        .middle-door { position: absolute; bottom: 0; left: 0; width: 100%; padding: 50px 30px; border-radius: 0 0 20px 20px; background-color: rgba(0,0,0,0.5); color: white; font-size: 30px; font-weight: normal; }
+
+        .three-box { width: 100%; padding: 80px 100px; background-color: #fff; box-sizing: border-box; font-family: "Noto Sans KR", sans-serif; font-weight: 100; }
+        .top-box { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 40px; }
+        .category-box { text-align: center; padding: 0 40px; }
+        .small-category { font-size: 18px; color: #333; margin-bottom: 20px; font-weight: normal; }
+        .big-category { font-size: 45px; font-weight: 200; line-height: 1.3; color: #111; margin-bottom: 20px; }
+        .ex-category { font-size: 20px; color: #666; line-height: 1.6; font-weight: 250; }
+        .door-box{ width: 400px; height: 400px; background-size: cover; background-position: center; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; font-size: 22px; font-weight: normal; position: relative; background-image: url('https://www.wood.co.kr/data/main_cate/file1_16382354115bk5xbdgve.jpg'); }
+        .middledoor-box { width: 400px; height: 400px; background-size: cover; background-position: center; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; font-size: 22px; font-weight: normal; position: relative; background-image: url('https://www.wood.co.kr/data/main_cate/file1_1638235382udoib422vy.jpg'); }
+        .bottom-box { display: flex; justify-content: space-between; gap: 25px; width: 100%; }
+        .seat-box, .board-box, .changho-box, .tree-box { width: 400px; height: 400px; background-size: cover; background-position: center; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; font-size: 22px; font-weight: normal; position: relative; }
+        .seat-box { background-image: url('https://www.wood.co.kr/data/main_cate/file1_1638235353kgi2ots5xp.jpg'); }
+        .board-box { background-image: url('https://www.wood.co.kr/data/main_cate/file1_16498999289y66rgqszp.jpg'); }
+        .changho-box { background-image: url('https://www.wood.co.kr/data/main_cate/file1_16382352716f5u99nfim.jpg'); }
+        .tree-box { background-image: url('https://www.wood.co.kr/data/main_cate/file1_1771985421b65ik38jcl.jpg'); }
+        .icon-space { width: 40px; height: 40px; background-size: contain; background-repeat: no-repeat; background-position: center; margin-bottom: 15px; }
+        .door-box, .middledoor-box, .seat-box, .board-box, .changho-box, .tree-box{ transition: 0.5s; overflow: hidden; position: relative; cursor: pointer; }
+        .door-box:hover, .middledoor-box:hover, .seat-box:hover, .board-box:hover, .changho-box:hover, .tree-box:hover { transform: scale(1.1); }
+
+        .fourth-box { display: flex; width: 100%; height: 90vh; overflow: hidden; background-color: #111; }
+        .showroom-box { width: 30%; display: flex; justify-content: center; align-items: end; flex-direction: column; padding: 0 50px; text-align: center; font-family: "Noto Sans KR", sans-serif; font-weight: 100; }
+        .small-show { font-size: 18px; color: #e7e7e7; margin-bottom: 50px; font-weight: normal; }
+        .big-show { font-size: 65px; font-weight: 200; line-height: 1.3; color: #e7e7e7; display: flex; justify-content: center; align-items: end; }
+        .line2 { width: 65px; height: 1px; background-color: #e7e7e7; margin-top: 40px; margin-bottom: 40px; }
+        .ex-wd { font-size: 24px; font-weight: 300; line-height: 1.6; color: #777777; }
+        .ex-show { font-size: 18px; font-weight: 300; line-height: 1.6; color: #777777; }
+        .second-img2 { width: 70%; background-image: url('https://www.wood.co.kr/data/main/file1_16478436857asmbcylv3.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; border-radius: 20px; border: 1px solid #9b9b9b; left: 5%; }
+
+        .fifth-box { width: 100%; padding: 100px; box-sizing: border-box; background-color: #f7f7f7; background-image: url('https://www.wood.co.kr/images/main/sec5_bg.png'); background-size: cover; background-position: center; background-repeat: no-repeat; font-family: "Noto Sans KR", sans-serif; font-weight: 100; }
+        .headerBox { margin-bottom: 50px; }
+        .glbox { font-size: 14px; color: #333; margin-bottom: 20px; font-weight: normal; letter-spacing: 1px; }
+        .bestqual { font-size: 45px; font-weight: 200; color: #111; }
+        .gallery-wrap { display: flex; justify-content: space-between; gap: 20px; width: 100%; }
+        .gallery-item { flex: 1; display: flex; flex-direction: column; }
+        .g-img { width: 100%; height: 450px; border-radius: 10px; background-size: cover; background-position: center; background-repeat: no-repeat; margin-bottom: 15px; }
+        .g-img.img1 { background-image: url('https://www.wood.co.kr/data/main/file1_1647920234itzr6br01q.jpg'); }
+        .g-img.img2 { background-image: url('https://www.wood.co.kr/data/main/file1_1647920161mdy2qps5ci.jpg'); }
+        .g-img.img3 { background-image: url('https://www.wood.co.kr/data/main/file1_1647920095wfs1yb28ie.jpg'); }
+        .g-img.img4 { background-image: url('https://www.wood.co.kr/data/main/file1_1647920031kure76mpt6.jpg'); }
+        .gallery-item p { font-size: 24px; color: #555; margin: 0; font-weight: 300; }
+
+        .sixth-box { width: 100%; height: 100vh; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; font-family: "Noto Sans KR", sans-serif; font-weight: 100; }
+        .frame-Box { width: 95%; height: 90%; background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px; background-color: rgba(255,255,255,0.1); }
+        .headerBox2 { position: absolute; top: 20%; width: 100%; text-align: center; z-index: 2; }
+        .smallbrand { font-size: 20px; color: #fff; margin-bottom: 25px; font-weight: normal; }
+        .begreen { font-size: 55px; font-weight: 200; color: #fff; margin: 0; line-height: 1.2; }
+        .bottom-box2 { position: absolute; bottom: 25%; width: 80%; display: flex; justify-content: space-between; z-index: 2; }
+        .time-box, .echo-box, .manjok-box, .design-box { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; color: #fff; }
+        .bottom-box2 .icon-space { width: 60px; height: 60px; margin-bottom: 25px; }
+        .bt-ttBox { font-size: 30px; font-weight: 400; margin-bottom: 15px; }
+        .smallex-Box { font-size: 20px; font-weight: 200; line-height: 1.6; margin: 0; color: #f3f3f3; }
+
+        .seventh-box { width: 100%; height: 100vh; background-color: #ebebeb; position: relative; display: flex; align-items: center; justify-content: flex-end; font-family: "Noto Sans KR", sans-serif; font-weight: 100; overflow: hidden; }
+        .mediaBox { width: 50%; height: 100%; background-color: #171717; display: flex; flex-direction: column; justify-content: center; padding-left: 12%; box-sizing: border-box; border-radius: 10px; }
+        .left-subBox { position: absolute; left: 5%; width: 50%; border-radius: 10px; overflow: hidden; box-shadow: 20px 20px 40px rgba(0,0,0,0.3); z-index: 10; }
+        .left-subBox iframe { width: 100%; aspect-ratio: 16 / 9; display: block; border: none; }
+        .small-media { font-size: 24px; color: #afafaf; margin-bottom: 20px; letter-spacing: 2px; font-weight: normal; }
+        .big-media { font-size: 64px; font-weight: 200; color: #fff; margin: 0; line-height: 1.3; }
+        .line3 { width: 300px; height: 1px; background-color: #f7f7f7; margin: 50px 0 30px 0; }
+        .ex-media { font-size: 25px; color: #afafaf; font-weight: 300; margin: 0; }
+
+        .final-box { width: 100%; height: 80vh; background-color: #f2f2f2; background-image: url('https://www.wood.co.kr/images/main/sec8_text.png'); background-size: contain; background-position: bottom; background-repeat: no-repeat; font-family: "Noto Sans KR", sans-serif; font-weight: 100; padding-top: 150px; overflow: hidden; }
+        .small-instagram { text-align: center; font-size: 22px; color: #111; margin-bottom: 40px; font-weight: bold; }
+        .big-instagram { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 40px; }
+        .big-instagram h2 { font-size: 45px; font-weight: 200; color: #111; margin: 0; }
+        .insta-icon { width: 40px; height: 40px; background-image: url('https://www.wood.co.kr/images/main/sec8_sns_icon.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .nemonemoBox { display: flex; justify-content: center; align-items: center; gap: 20px; width: 100%; padding: 0 20px; box-sizing: border-box; }
+        .bigBox-media { width: 360px; height: 360px; border-radius: 10px; background-size: cover; background-position: center; background-repeat: no-repeat; background-color: #ddd; }
+        .smallBox-media { width: 250px; height: 250px; border-radius: 10px; background-size: cover; background-position: center; background-repeat: no-repeat; background-color: #ddd; }
+
+        .bottom-section { display: flex; align-items: center; width: 100%; padding: 50px 100px; background-color: #000000; box-sizing: border-box; font-family: "Noto Sans KR", sans-serif; }
+        .logo-section { margin-right: 40px; }
+        .woodin-logo { width: 150px; height: 30px; background-image: url('https://www.wood.co.kr/images/common/logo2.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .line4 { width: 1px; height: 80px; background-color: #333333; margin-right: 40px; }
+        .caption-Box { display: flex; flex-direction: column; justify-content: center; }
+        .ex-bottom { font-size: 17px; color: #888888; font-weight: 300; margin: 6px 0; letter-spacing: 0.5px; }
+        .teil-Box { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; }
+        .teil-Box .ex-bottom { color: #aaaaaa; margin-bottom: 20px; word-spacing: 10px; }
+        .sns-wrap { display: flex; gap: 10px; }
+        .icon-space2 { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #555555; background-size: 20px; background-repeat: no-repeat; background-position: center; cursor: pointer; }
+        .icon-space2:hover { border-color: #ffffff; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="gnb">
+            <a href="main.html" class="logo"><img src="https://www.wood.co.kr/images/common/logo.png" alt="로고"></a>
+            <div class="menu-container">
+                <div class="menu">
+                    <a href="b.html" class="sub-title">브랜드</a>
+                    <ul class="snb"><li><a href="#">브랜드스토리</a></li><li><a href="#">연혁 및 인증</a></li><li><a href="#">CI&BI</a></li><li><a href="#">오시는길</a></li></ul>
+                </div>
+                <div class="menu">
+                    <a href="s.html" class="sub-title">스토리</a>
+                    <ul class="snb"><li><a href="#">미디어</a></li><li><a href="#">홍보</a></li><li><a href="#">협찬</a></li><li><a href="#">이벤트</a></li></ul>
+                </div>
+                <div class="menu">
+                    <a href="g.html" class="sub-title">갤러리</a>
+                    <ul class="snb"><li><a href="#">컬렉션</a></li><li><a href="#">인테리어</a></li><li><a href="#">익스테리어</a></li></ul>
+                </div>
+                <div class="menu">
+                    <a href="m.html" class="sub-title">쇼룸</a>
+                    <ul class="snb"><li><a href="#">전시장</a></li></ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-box">
+        <div class="main-img">
+            <div class="door left"></div>
+            <div class="door right"></div>
+            <h2 class="htitle">CREATING HEALING SPACE IS<br>WOODIN HAUS'S TOP PRIORITY.</h2>
+        </div>
+    </div>
+
+    <div class="second-box scroll-section">
+        <div class="left-box">
+           <h2 class="sub-title2">BEST PRODUCT</h2>
+           <h2 class="main-title">ECO-FRIENDLY AND<br>HIGH-QUALITY<br>PRODUCTS</h2>
+           <div class="line1"></div>
+           <h2 class="sub-ex">우딘 HAUS는 건강한 공간을 위한<br>최선의 선택을 합니다.</h2>
+        </div>
+        <div class="second-img">
+           <h2 class="middle-door">중문 | 제네로 시리즈</h2>
+        </div>
+    </div>
+
+    <div class="three-box scroll-section">
+        <div class="top-box">
+            <div class="door-box">
+                <div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_16423829087d0umvkgvv.png');"></div>
+                도어
+            </div>
+            <h2 class="category-box">
+                <div class="small-category">CATEGORY</div>
+                <div class="big-category">DESIGN FOR HEALTH<br>AND WELL-BEING</div>
+                <div class="ex-category">우딘은 건강한 공간을 만든다는 일념으로 끊임없이 친환경 제품을 연구합니다.</div>
+            </h2>
+            <div class="middledoor-box">
+                <div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_1638235382fgdt5930lj.png');"></div>
+                중문
+            </div>
+        </div>
+        <div class="bottom-box">
+            <div class="seat-box"><div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_1638235353rtgpsq58jh.png');"></div>시트</div>
+            <div class="board-box"><div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_16382353154hi9wephhy.png');"></div>보드</div>
+            <div class="changho-box"><div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_163823527109027qq4xg.png');"></div>창호</div>
+            <div class="tree-box"><div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_1638235232g9sgmke468.png');"></div>목재</div>
+        </div>
+    </div>
+
+    <div class="fourth-box scroll-section">
+        <div class="showroom-box">
+            <h2 class="small-show">SHOWROOM</h2>
+            <h2 class="big-show">ㅤㅤWOODIN<br>SHOWROOM</h2>
+            <div class="line2"></div>
+            <h2 class="ex-wd">우딘 전시장</h2>
+            <h2 class="ex-show">인천 서구 북항로 122 (원창동) T. 032-583-0160</h2>
+        </div>
+        <div class="second-img2"></div>
+    </div>
+
+    <div class="fifth-box scroll-section">
+        <div class="headerBox">
+            <h2 class="glbox">GALLERY</h2>
+            <h2 class="bestqual">BEST QUALITY WELLNESS INTERIOR</h2>
+        </div>
+        <div class="gallery-wrap">
+            <div class="gallery-item"><div class="g-img img1"></div><p>제네로 시리즈</p></div>
+            <div class="gallery-item"><div class="g-img img2"></div><p>비지오그란데</p></div>
+            <div class="gallery-item"><div class="g-img img3"></div><p>타공 양개 도어</p></div>
+            <div class="gallery-item"><div class="g-img img4"></div><p>시그니처 도어</p></div>
+        </div>
+    </div>
+
+    <div class="sixth-box scroll-section" style="background-image: url('https://www.wood.co.kr/images/main/brand_bg.jpg');">
+        <div class="frame-Box">
+            <div class="headerBox2">
+                <h2 class="smallbrand">BRAND</h2>
+                <h2 class="begreen">BE GREEN, BE HEALING LIFE</h2>
+            </div>
+            <div class="bottom-box2">
+                <div class="time-box">
+                    <div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_1638235232g9sgmke468.png');"></div>
+                    <h2 class="bt-ttBox">40년 목재 역사</h2>
+                    <h2 class="smallex-Box">Since 1982</h2>
+                    <h2 class="smallex-Box">특수목 전문 기업</h2>
+                </div>
+                <div class="echo-box">
+                    <div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_16382353154hi9wephhy.png');"></div>
+                    <h2 class="bt-ttBox">친환경 자재 사용</h2>
+                    <h2 class="smallex-Box">자연과 가까운</h2>
+                    <h2 class="smallex-Box">친환경 제품 사용</h2>
+                </div>
+                <div class="manjok-box">
+                    <div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_163823527109027qq4xg.png');"></div>
+                    <h2 class="bt-ttBox">고객 만족 제일주의</h2>
+                    <h2 class="smallex-Box">세계의 다양한 목재를 연구, 개발</h2>
+                    <h2 class="smallex-Box">합리적 가격의 제품을 생산</h2>
+                </div>
+                <div class="design-box">
+                    <div class="icon-space" style="background-image: url('https://www.wood.co.kr/data/main_cate/file2_1638235353rtgpsq58jh.png');"></div>
+                    <h2 class="bt-ttBox">감각적 디자인</h2>
+                    <h2 class="smallex-Box">다양한 디자인의 제품으로</h2>
+                    <h2 class="smallex-Box">색다른 인테리어 연출</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="seventh-box scroll-section">
+        <div class="left-subBox">
+            <iframe src="https://www.youtube.com/embed/oLLHNlDU_9w?si=XJ8NzI6yRlWtDh50" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <div class="mediaBox">
+            <h2 class="small-media">MEDIA</h2>
+            <h2 class="big-media">HEALING HAUS</h2>
+            <h2 class="big-media">WOODIN HAUS</h2>
+            <div class="line3"></div>
+            <h2 class="ex-media">Rethink DOOR 역할론편</h2>
+        </div>
+    </div>
+
+    <div class="final-box scroll-section">
+        <div class="small-instagram">INSTAGRAM</div>
+        <div class="big-instagram">
+            <h2>FOLLOW US ON INSTAGRAM</h2>
+            <div class="insta-icon"></div>
+        </div>
+        <div class="nemonemoBox">
+            <div class="bigBox-media" style="background-image: url('https://www.wood.co.kr/data/main/file1_16473229632uuzged2id.jpg');"></div>
+            <div class="smallBox-media" style="background-image: url('https://www.wood.co.kr/data/main/file1_1647322624oeg0sr8ddl.jpg');"></div>
+            <div class="bigBox-media" style="background-image: url('https://www.wood.co.kr/data/main/file1_17470353787bgl04mfpz.jpg');"></div>
+            <div class="smallBox-media" style="background-image: url('https://www.wood.co.kr/data/main/file1_174703535776u9rl4eu5.jpg');"></div>
+            <div class="bigBox-media" style="background-image: url('https://www.wood.co.kr/data/main/file1_1747034813x6k4wrdp7e.jpg');"></div>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="logo-section"><div class="woodin-logo"></div></div>
+        <div class="line4"></div>
+        <div class="caption-Box">
+            <h2 class="ex-bottom">사업자등록번호 137.81.48926 | ADD 인천 서구 북항로 54 (원창동 381-118)</h2>
+            <h2 class="ex-bottom">TEL 032-583-0160 | FAX 032-583-0161</h2><br>
+            <h2 class="ex-bottom">COPYRIGHT Ⓒ 2022(주)우딘 RIGHTS RESERVED.</h2>
+        </div>
+        <div class="teil-Box">
+            <h2 class="ex-bottom">개인정보보호정책 이메일무단수집거부</h2>
+            <div class="sns-wrap">
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns1.png');"></div>
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns2.png');"></div>
+                <div class="icon-space2" style="background-image: url('https://www.wood.co.kr/images/common/foot_sns3.png');"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            setTimeout(() => window.scrollTo(0, 0), 10);
+            setTimeout(() => document.querySelector(".main-img").classList.add("on"), 100);
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('on');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-section').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
