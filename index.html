@@ -1,33 +1,496 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300..800&family=Black+Han+Sans&family=Do+Hyeon&family=DotGothic16&family=Gamja+Flower&family=Grandiflora+One&family=Gugi&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Single+Day&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/reset.css">
-    <link rel="stylesheet" href="./css/common.css">
-    <link rel="stylesheet" href="./css/index.css">
-    <title>테무 우딘HAUS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300..800&family=Black+Han+Sans&family=Do+Hyeon&family=DotGothic16&family=Gamja+Flower&family=Grandiflora+One&family=Gugi&family=Jua&family=Noto+Sans+KR:wght@100&family=Single+Day&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>점심 어디서 먹지 MAP</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+        .search-container {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center; /* 요소들을 수직 중앙 정렬 */
+            gap: 8px;
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
+        /* 새로 추가된 로고 스타일 */
+        .logo {
+            width: 178px; /* 가로길이 */
+            height: 45px; /* 세로길이 (1200x450 비율에 맞춤) */
+            object-fit: cover; /* 이미지가 찌그러지지 않고 비율에 맞게 꽉 차게 자름 */
+            object-position: center; /* 원본의 '가운데' 부분을 보여줌 (top이나 bottom으로 변경 가능) */
+            border-radius: 5px; /* 테두리 살짝 둥글게 */
+        }
+
+        #keyword {
+            height: 45px; /* 로고 높이에 맞춤 */
+            box-sizing: border-box;
+            padding: 0 12px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 400px;
+            font-family: "Asta Sans", sans-serif;
+        }
+
+        .search-btn {
+            height: 45px; /* 로고 높이에 맞춤 */
+            box-sizing: border-box;
+            padding: 0 18px;
+            font-size: 15px;
+            background: #3a9dff;
+            color: #fff;
             border: none;
-            display: block;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: "Jua", sans-serif;
+        }
+        
+        .location-btn {
+            height: 45px; /* 로고 높이에 맞춤 */
+            width: 45px;  /* 정사각형 버튼으로 통일 */
+            box-sizing: border-box;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .location-btn img {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* 아래부터는 기존 지도 및 마커 스타일과 동일 */
+        .wrap {
+            position: absolute;
+            left: 0;
+            bottom: 25px;
+            width: 500px;
+            height: 250px;
+            margin-left: -250px;
+            text-align: left;
+            overflow: hidden;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .wrap * {
+            padding: 0;
+            margin: 0; 
+            font-family: "Asta Sans", sans-serif;
+            font-weight: 400;
+        }
+        
+        .wrap .info {
+            width: 500px;
+            height: 220px;
+            border-radius: 8px;
+            border-bottom: 2px solid #ccc;
+            border-right: 1px solid #ccc;
+            overflow: hidden;
+            background: #fff;
+        }
+        
+        .wrap .info:nth-child(1) {
+            border: 0;
+            box-shadow: 0px 2px 4px #888;
+        }
+        
+        .info .title {
+            padding: 10px 0 0 15px;
+            height: 45px;
+            background: #3a9dff; 
+            color: #fff; 
+            border-bottom: 1px solid #ddd;
+            font-size: 22px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .title .rating {
+            color: #ffe000;
+            font-size: 20px;
+            margin-left: 8px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .info .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #888;
+            width: 17px;
+            height: 17px;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
+            background-size: cover;
+        }
+        
+        .info .close:hover {
+            cursor: pointer;
+        }
+        
+        .info .body {
+            position: relative;
+            overflow: hidden;
+            padding: 15px;
+        }
+        
+        .info .desc {
+            position: relative;
+            margin: 0 0 0 160px;
+            height: 140px;
+        }
+        
+        .desc .ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 3px;
+        }
+        
+        .desc .jibun {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+        
+        .desc .comment {
+            font-size: 14px;
+            color: #ff5252;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 4px;
+            background: #fdf0f0;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .info .img {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 140px;
+            height: 140px;
+            border: 1px solid #ddd;
+            color: #888;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        
+        .info:after {
+            content: '';
+            position: absolute;
+            margin-left: -12px;
+            left: 50%;
+            bottom: 18px;
+            width: 22px;
+            height: 12px;
+            background: url('https://cdn.sayun.studio/boottent/files/assets/ezenas/photo/photo_22edcd69-a1ff-4a02-8ada-dc034f6a5ebe.jpg');
+            background-size: cover;
+        }
+        
+        .info .link {
+            color: #3a9dff;
+            font-size: 15px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .info .link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <iframe src="./html/main.html" title="우딘HAUS 메인화면"></iframe>
+
+<div class="search-container">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc6EVFjZmddviNNQQyHZd7cC5RdWrJpE6HnA&s" class="logo" alt="서비스 로고">
+    
+    <input type="text" id="keyword" placeholder="장소, 주소 검색" onkeydown="if(event.keyCode==13) searchPlaces()">
+    <button class="search-btn" onclick="searchPlaces()">검색</button>
+    <button class="location-btn" onclick="openEzenOverlay()" title="이젠컴퓨터학원 보기">
+        <img src="https://user-images.githubusercontent.com/9743288/64541313-f3d95980-d321-11e9-8c85-672816d3c501.png" alt="현위치">
+    </button>
+</div>
+
+<div id="map" style="width:100%;height:1080px;"></div>
+
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=9563abd14f49ee3d97a7231d0717a884&libraries=services"></script>
+<script>
+var mapContainer = document.getElementById('map');
+var mapOption = { 
+    center: new kakao.maps.LatLng(37.308447129768, 126.850952825644), 
+    level: 3 
+}; 
+
+var map = new kakao.maps.Map(mapContainer, mapOption); 
+var overlay = new kakao.maps.CustomOverlay({ map: null });
+var ps = new kakao.maps.services.Places();
+var markersArray = [];
+
+var markerData = [
+    {
+        latlng: new kakao.maps.LatLng(37.308447129768, 126.850952825644),
+        content: `
+            <div class="wrap">
+                <div class="info">
+                    <div class="title">
+                        이젠컴퓨터학원 안산점 <span class="rating">★ 100.0</span>
+                        <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="img">
+                            <img src="https://cdn.sayun.studio/boottent/files/assets/ezenas/photo/photo_22edcd69-a1ff-4a02-8ada-dc034f6a5ebe.jpg" width="100%" height="100%" style="object-fit: cover;">
+                        </div>
+                        <div class="desc">
+                            <div class="ellipsis">경기 안산시 상록구 광덕1로 375</div>
+                            <div class="jibun ellipsis">(우) 15502 (지번) 이동 715-3</div>
+                            <div class="comment">정말 좋은 곳입니다. 특히 이애령 강사님이 최고입니다.</div>
+                            <div><a href="https://as.ezenac.co.kr/index_direct.asp" target="_blank" class="link">공식 홈페이지 바로가기</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+    { 
+        latlng: new kakao.maps.LatLng(37.3090519122874, 126.85162032699), 
+        content: `
+            <div class="wrap">
+                <div class="info">
+                    <div class="title">
+                        미스터육회연어왕 안산점 <span class="rating">★ 4.8</span>
+                        <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="img">
+                            <img src="https://peton.me/data/file/addPlace/%EB%AF%B8%EC%8A%A4%ED%84%B0_%EC%9C%A1%ED%9A%8C%EC%97%B0%EC%96%B4%EC%99%95_%EB%A7%88%ED%8F%AC%EC%A0%90_17_4.webp" width="100%" height="100%" style="object-fit: cover;">
+                        </div>
+                        <div class="desc">
+                            <div class="ellipsis">경기 안산시 상록구 광덕1로 385</div>
+                            <div class="jibun ellipsis">(우) 15494(지번) 이동 715</div>
+                            <div class="comment">가격, 맛, 속도 다 갖춰서 점심 메뉴로 굿 초이스.</div>
+                            <div><a href="https://place.map.kakao.com/752300219" target="_blank" class="link">상세 보기</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ` 
+    },
+    { 
+        latlng: new kakao.maps.LatLng(37.3069253524597, 126.849867876038), 
+        content: `
+            <div class="wrap">
+                <div class="info">
+                    <div class="title">
+                        국수한상 <span class="rating">★ 4.0</span>
+                        <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="img">
+                            <img src="https://d12zq4w4guyljn.cloudfront.net/750_750_20240425113142_photo1_e41e2275bdd6.webp" width="100%" height="100%" style="object-fit: cover;">
+                        </div>
+                        <div class="desc">
+                            <div class="ellipsis">경기 안산시 상록구 광덕1로 358 에이스프라자 1층 101호</div>
+                            <div class="jibun ellipsis">(우) 15495(지번) 이동 717-3</div>
+                            <div class="comment">면발이 레전드임. 근데 고명에 버섯있어서 감점🥺</div>
+                            <div><a href="https://map.kakao.com/?urlX=466631.00000000204&urlY=1057688.999999999&urlLevel=3&itemId=22174806&q=%ED%83%91%EA%B5%AD%EC%88%98%EC%A7%91&srcid=22174806&map_type=TYPE_MAP#none" target="_blank" class="link">상세 보기</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ` 
+    },
+    { 
+        latlng: new kakao.maps.LatLng(37.3090519122874, 126.85182032699), 
+        content: `
+            <div class="wrap">
+                <div class="info">
+                    <div class="title">
+                        천하일면 안산한대역점 <span class="rating">★ 3.5</span>
+                        <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="img">
+                            <img src="https://d12zq4w4guyljn.cloudfront.net/750_750_20260409044828893_photo_ef0f56729a72.webp" width="100%" height="100%" style="object-fit: cover;">
+                        </div>
+                        <div class="desc">
+                            <div class="ellipsis">경기 안산시 상록구 광덕1로 385 102호</div>
+                            <div class="jibun ellipsis">(지번) 경기 안산시 상록구 이동 715</div>
+                            <div class="comment">정말 맛있는 라멘집..인데 오래걸림. 뜨거워서<br>빨리 먹기도 힘듦. 신기하게 갈 때마다 강사님을 만남.</div>
+                            <div><a href="https://place.map.kakao.com/1895211132" target="_blank" class="link">상세 보기</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ` 
+    },
+    { 
+        latlng: new kakao.maps.LatLng(37.3090519122874, 126.85202032699), 
+        content: `
+            <div class="wrap">
+                <div class="info">
+                    <div class="title">
+                        리틀하노이 베트남쌀국수 <span class="rating">★ 4.9</span>
+                        <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="img">
+                            <img src="https://mblogthumb-phinf.pstatic.net/MjAyMTEyMDRfMjYy/MDAxNjM4NjA3MzY2NjM1.fhHtyMOnDeagQgcn2J-zFhgOL4aN05ZO6hwxp6iWGtQg.or4PVrOXHQRLbXIQlx31_aWh4XuAa67ehjmcSnoQ8KQg.JPEG.mlikjoayo/20211204_130942.jpg?type=w800" width="100%" height="100%" style="object-fit: cover;">
+                        </div>
+                        <div class="desc">
+                            <div class="ellipsis">경기 안산시 상록구 광덕1로 385</div>
+                            <div class="jibun ellipsis">(우) 15494(지번) 이동 715</div>
+                            <div class="comment">현수님 추천 맛집. 한 입 먹는 순간 베트남감.</div>
+                            <div><a href="https://map.kakao.com/?urlX=466631.00000000204&urlY=1057688.999999999&urlLevel=3&itemId=22174806&q=%ED%83%91%EA%B5%AD%EC%88%98%EC%A7%91&srcid=22174806&map_type=TYPE_MAP#none" target="_blank" class="link">상세 보기</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ` 
+    },
+    { 
+        latlng: new kakao.maps.LatLng(37.3095731662347, 126.850820653057), 
+        content: `
+            <div class="wrap">
+                <div class="info">
+                    <div class="title">
+                        한끼닭칼국수 안산본점 <span class="rating">★ 4.5</span>
+                        <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="img">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSscy2xJpPoras3dOO3Ax1gs1K7AIXokj2ZkA&s" width="100%" height="100%" style="object-fit: cover;">
+                        </div>
+                        <div class="desc">
+                            <div class="ellipsis">경기 안산시 상록구 양지편로 35 1층</div>
+                            <div class="jibun ellipsis">(우) 15489(지번) 이동 709-2</div>
+                            <div class="comment">닭다리 하나 통째로 올려줌. 이열치열 뭔말알?</div>
+                            <div><a href="https://map.kakao.com/?urlX=466631.00000000204&urlY=1057688.999999999&urlLevel=3&itemId=22174806&q=%ED%83%91%EA%B5%AD%EC%88%98%EC%A7%91&srcid=22174806&map_type=TYPE_MAP#none" target="_blank" class="link">상세 보기</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ` 
+    },
+    { 
+        latlng: new kakao.maps.LatLng(37.3090045991333, 126.850609255264), 
+        content: `
+            <div class="wrap">
+                <div class="info">
+                    <div class="title">
+                        큰집식당 <span class="rating">★ 3.7</span>
+                        <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="img">
+                            <img src="https://mblogthumb-phinf.pstatic.net/MjAyNTExMjhfMTU1/MDAxNzY0MjYzMTAwMDc3.zguxaFBEZhd2HM_sBsw63SNwxQykVJGBah4d__eiE0wg.MJ5X7Og4p0eF4BPl79LvIk5L3GBYUFMTfnFUBdfYE0Ig.JPEG/IMG_7032(2).JPG?type=w800" width="100%" height="100%" style="object-fit: cover;">
+                        </div>
+                        <div class="desc">
+                            <div class="ellipsis">경기 안산시 상록구 양지편로 32 조강프라자 1층</div>
+                            <div class="jibun ellipsis">(우) 15494(지번) 이동 715-8</div>
+                            <div class="comment">장점 : 퀄리티, 밥이 많다. 단점 : 가격대, 밥이 많다.</div>
+                            <div><a href="https://map.kakao.com/?nil_profile=title&nil_src=local#none" target="_blank" class="link">Homepage</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ` 
+    },
+    { 
+        latlng: new kakao.maps.LatLng(37.3090045991333, 126.851009255264), 
+        content: `
+            <div class="wrap">
+                <div class="info">
+                    <div class="title">
+                        오봉집 안산한대앞점 <span class="rating">★ 0.0</span>
+                        <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="img">
+                            <img src="https://dnvefa72aowie.cloudfront.net/business-profile/bizPlatform/profile/17492531/1720185790213/SU1HXzQ3MjcuanBlZw==.jpeg?q=95&amp;s=1440x1440&amp;t=inside&amp;service=business-post" width="100%" height="100%" style="object-fit: cover;">
+                        </div>
+                        <div class="desc">
+                            <div class="ellipsis">경기 안산시 상록구 양지편로 32 조강프라자 1층 105호</div>
+                            <div class="jibun ellipsis">(우) 15494(지번) 이동 715-8</div>
+                            <div class="comment">안먹어봤는데 북마크에 있음. 칼낙지로 유명한 체인점</div>
+                            <div><a href="https://place.map.kakao.com/808422936#review" target="_blank" class="link">Homepage</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ` 
+    }
+];
+
+for (var i = 0; i < markerData.length; i++) {
+    var marker = new kakao.maps.Marker({
+        map: map,
+        position: markerData[i].latlng
+    });
+    
+    markersArray.push(marker);
+
+    if (markerData[i].content !== '') {
+        (function(marker, content) {
+            kakao.maps.event.addListener(marker, 'click', function() {
+                overlay.setContent(content);
+                overlay.setPosition(marker.getPosition());
+                overlay.setMap(map);
+            });
+        })(marker, markerData[i].content);
+    }
+}
+
+function openEzenOverlay() {
+    if (markersArray.length > 0) {
+        var ezenMarker = markersArray[0]; 
+        var ezenContent = markerData[0].content;
+        
+        map.setCenter(ezenMarker.getPosition());
+        
+        overlay.setContent(ezenContent);
+        overlay.setPosition(ezenMarker.getPosition());
+        overlay.setMap(map);
+    }
+}
+
+function searchPlaces() {
+    var keyword = document.getElementById('keyword').value;
+    if (!keyword.replace(/^\s+|\s+$/g, '')) {
+        alert('키워드를 입력해주세요.');
+        return false;
+    }
+    ps.keywordSearch(keyword, placesSearchCB);
+}
+
+function placesSearchCB(data, status, pagination) {
+    if (status === kakao.maps.services.Status.OK) {
+        var bounds = new kakao.maps.LatLngBounds();
+        for (var i = 0; i < data.length; i++) {
+            var searchMarker = new kakao.maps.Marker({
+                map: map,
+                position: new kakao.maps.LatLng(data[i].y, data[i].x)
+            });
+            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+        }       
+        map.setBounds(bounds);
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        alert('검색 결과가 존재하지 않습니다.');
+    } else if (status === kakao.maps.services.Status.ERROR) {
+        alert('검색 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+}
+
+function closeOverlay() {
+    overlay.setMap(null);    
+}
+</script>
 </body>
 </html>
