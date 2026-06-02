@@ -182,6 +182,29 @@ button {
     box-shadow: var(--shadow);
 }
 
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden; /* 가로 스크롤 발생 방지 */
+        width: 100%;
+        position: relative;
+    }
+
+    /* 화면 밖으로 튀어나가는 모든 요소 강제 제한 */
+    * {
+        max-width: 100vw;
+    }
+
+    /* .hero 섹션이 여백을 만드는 주범인 경우 */
+    .hero {
+        width: 100vw !important; /* 화면 가로폭을 100vw로 강제 고정 */
+        margin: 0 !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        box-sizing: border-box;
+        border-radius: 0px;
+    }
+}
+
 .hero-copy {
     width: min(900px, calc(100% - 42px));
     margin: 0 auto;
