@@ -16,6 +16,8 @@ const categories = [
 
 let productCache = null;
 let currentCategory = "전체";
+let filterSafe = false;   // 추가: 안전결제 체크 여부
+let filterOnSale = false; // 추가: 판매중 체크 여부
 
 const store = {
     name: "비공식 굿즈 전문샵 가나안",
@@ -73,19 +75,20 @@ const navigate = (page, options = {}) => {
     setActiveNav(page);
     routes[page]?.(options);
     app.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // 추가된 부분
 };
 
 const renderHome = () => {
     app.innerHTML = `
         <section class="hero">
             <div class="hero-copy">
-                <span class="eyebrow">Unofficial K-POP Goods Store</span>
-                <h1>GANAAN</h1>
-                <p>
-                    광야를 지나 도착하는 팬들의 가나안. 콘서트 전날 필요한 응원 굿즈부터
-                    포토카드 보관템, 생일 카페 소품까지 비공식 팬메이드 굿즈를 한곳에서 둘러보세요.
+                <span class="eyebrow scroll-reveal">Unofficial K-POP Goods Store</span>
+                <h1 class="scroll-reveal" style="transition-delay: 0.1s;">GANAAN</h1>
+                <p class="scroll-reveal" style="transition-delay: 0.2s;">
+                    온라인 쇼핑몰을 소유하지 않거나 오픈마켓에 입점하지 않은 개인을 위한 맞춤 주문서 서비스.<br>
+                    제일 빠르게 K-POP을 포함한 다양한 장르의 굿즈를 지금 바로 가나안에서 거래해보세요.
                 </p>
-                <div class="hero-actions">
+                <div class="hero-actions scroll-reveal" style="transition-delay: 0.3s;">
                     <button class="primary-button" type="button" data-jump="products">상품 보기</button>
                     <button class="secondary-button" type="button" data-jump="today">오늘의 팬 스케줄</button>
                 </div>
@@ -96,6 +99,17 @@ const renderHome = () => {
     app.querySelectorAll("[data-jump]").forEach((button) => {
         button.addEventListener("click", () => navigate(button.dataset.jump));
     });
+
+    // IntersectionObserver API로 화면에 보일 때 애니메이션(.is-visible) 실행
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    app.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
 };
 
 const renderProducts = async ({ category = "전체" } = {}) => {
@@ -106,13 +120,13 @@ const renderProducts = async ({ category = "전체" } = {}) => {
                 <div>
                     <span class="eyebrow">GANAAN Market</span>
                     <h1>${category === "전체" ? "전체 상품" : category}</h1>
-                    <p>자유로운 거래가 가능합니다. 상단 메뉴를 통해 카테고리별 목록을 바로 열 수 있습니다.</p>
+                    <p>상품을 누르면 구매 창으로 이동합니다. 상단 상품 보기 메뉴에서는 카테고리별 목록을 바로 열 수 있습니다.</p>
                 </div>
                 <button class="sort-button" type="button">최신순</button>
             </div>
             <div class="market-toolbar" aria-label="상품 조건">
-                <span class="round-filter">안전결제</span>
-                <span class="round-filter">판매중</span>
+                <button class="round-filter ${filterSafe ? 'is-active' : ''}" type="button" data-filter="safe">안전결제</button>
+                <button class="round-filter ${filterOnSale ? 'is-active' : ''}" type="button" data-filter="onsale">판매중</button>
             </div>
             <div class="category-chips" aria-label="카테고리 빠른 이동">
                 ${categories.map((item) => `
@@ -129,12 +143,24 @@ const renderProducts = async ({ category = "전체" } = {}) => {
 
     try {
         const products = await loadProducts();
-        const visibleProducts = category === "전체"
+        
+        // 1차 필터: 카테고리 분류
+        let visibleProducts = category === "전체"
             ? products
             : products.filter((product) => product.category === category);
 
+        // 2차 필터: 안전결제 여부
+        if (filterSafe) {
+            visibleProducts = visibleProducts.filter((product) => product.safe === true);
+        }
+        
+        // 3차 필터: 판매중 여부
+        if (filterOnSale) {
+            visibleProducts = visibleProducts.filter((product) => product.status === "판매중");
+        }
+
         if (visibleProducts.length === 0) {
-            grid.innerHTML = `<div class="empty-state">이 카테고리에 등록된 상품이 아직 없습니다.</div>`;
+            grid.innerHTML = `<div class="empty-state">조건에 맞는 상품이 없습니다.</div>`;
         } else {
             grid.innerHTML = visibleProducts.map(renderProductCard).join("");
         }
@@ -148,6 +174,17 @@ const renderProducts = async ({ category = "전체" } = {}) => {
 
     app.querySelectorAll("[data-filter-category]").forEach((button) => {
         button.addEventListener("click", () => navigate("products", { category: button.dataset.filterCategory }));
+    });
+
+    // 새로 추가: 안전결제, 판매중 버튼 클릭 이벤트 처리
+    app.querySelectorAll("[data-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+            if (button.dataset.filter === "safe") filterSafe = !filterSafe;
+            if (button.dataset.filter === "onsale") filterOnSale = !filterOnSale;
+            
+            // 버튼을 누를 때마다 화면을 새로고침하여 바뀐 필터를 적용
+            renderProducts({ category: currentCategory });
+        });
     });
 };
 
@@ -406,7 +443,7 @@ const renderMap = () => {
                     <p class="date">${store.address}</p>
                     <div class="store-list">
                         <div><b>운영 시간</b><span>평일 09:30 - 18:00 (주말/공휴일 휴무)</span></div>
-                        <div><b>알아두셔야 할 점</b><span>저희 가나안은 상품 유통만 하기에 오신다고 뭘 드릴 순 없습니다.<br>뭐라도 원하시면 강의실 뒤쪽의 젤리나 사탕을 가져가세요.</span></div>
+                        <div><b>알아두셔야 할 점</b><span>가나안은 상품 유통만 하기에 오신다고 뭘 드릴 순 없습니다.<br>뭐라도 원하시면 강의실 뒤쪽의 젤리나 사탕을 가져가세요.</span></div>
                         <div><b>길찾기</b><span>한대앞역 2번 출구 도보 5분 거리입니다.</span></div>
                     </div>
                 </aside>
@@ -478,3 +515,12 @@ categoryButtons.forEach((button) => {
 });
 
 navigate("home");
+
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('.site-header');
+    if (window.scrollY > 50) {
+        header.classList.add('is-scrolled');
+    } else {
+        header.classList.remove('is-scrolled');
+    }
+});

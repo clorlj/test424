@@ -56,18 +56,17 @@ button {
     text-decoration: none;
 }
 
+.brand-mark-img {
+    width: 50px;      /* 로고 너비 (원하시는 크기로 조절하세요) */
+    height: 50px;     /* 로고 높이 */
+    object-fit: contain;
+    
+}
+
+/* 기존에 썼던 .brand-mark의 CSS가 남아있다면 충돌할 수 있으니 삭제하거나, 
+   만약 .brand-mark를 다른 곳에서 쓴다면 아래처럼 덮어쓰세요 */
 .brand-mark {
-    display: grid;
-    width: 42px;
-    height: 42px;
-    place-items: center;
-    border: 2px solid var(--white);
-    border-radius: 50%;
-    color: var(--black);
-    background: var(--yellow);
-    font-family: "Asta Sans", sans-serif;
-    font-size: 0.84rem;
-    font-weight: 800;
+    display: none; /* 이전 텍스트 로고 숨김 */
 }
 
 .brand strong,
@@ -171,9 +170,9 @@ button {
 .hero {
     position: relative;
     display: grid;
-    width: min(1180px, calc(100% - 56px));
-    min-height: calc(100vh - 130px);
-    margin: 32px auto 72px;
+    width: min(100%);
+    min-height: calc(100vh);
+    /* margin: 32px auto 72px; */
     align-items: center;
     overflow: hidden;
     border-radius: 6px;
@@ -209,7 +208,7 @@ button {
 .hero h1 {
     margin: 18px 0 20px;
     color: var(--white);
-    font-family: "Jua", sans-serif;
+    font-family: "Single Day", sans-serif;
     font-size: clamp(4rem, 10vw, 8rem);
     line-height: 0.95;
     text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.45);
@@ -321,6 +320,11 @@ button {
     gap: 7px;
     color: var(--ink);
     font-size: 0.94rem;
+    cursor: pointer;          /* 클릭 가능한 손가락 커서 추가 */
+    background: transparent;  /* 배경 투명하게 (버튼화 대비) */
+    border: none;             /* 테두리 제거 */
+    padding: 0;
+    font-family: inherit;
 }
 
 .round-filter::before {
@@ -330,6 +334,12 @@ button {
     border: 1px solid var(--black);
     border-radius: 50%;
     content: "";
+}
+
+/* 새로 추가: 클릭(활성화)되었을 때의 디자인 */
+.round-filter.is-active::before {
+    background: var(--black);
+    box-shadow: inset 0 0 0 4px var(--white); /* 안쪽이 파인 검은색 동그라미 모양 */
 }
 
 .category-chips {
@@ -997,3 +1007,38 @@ button {
     font-size: 0.85rem;
     margin-left: 16px;
 }
+
+/* --- 스크롤 인터랙션 효과 --- */
+html {
+    scroll-behavior: smooth;
+}
+
+/* 1. 스크롤 시 헤더 축소 및 배경 조절 효과 */
+.site-header {
+    transition: height 0.3s ease, background 0.3s ease;
+}
+
+.site-header.is-scrolled {
+    height: 60px; /* 기존 80px에서 스크롤 시 60px로 축소 */
+    background: rgba(9, 9, 9, 0.95);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.site-header.is-scrolled .brand-mark {
+    transform: scale(0.85);
+    transition: transform 0.3s ease;
+}
+
+/* 2. 요소 부드럽게 등장 (IntersectionObserver용) */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
