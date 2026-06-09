@@ -1,649 +1,187 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FMK Copycat</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    
+    <title>칠판 낙서장</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="./reset.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Noto+Sans+KR:wght@300;500&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300..800&family=Black+Han+Sans&family=Do+Hyeon&family=DotGothic16&family=Gaegu&family=Gamja+Flower&family=Grandiflora+One&family=Gugi&family=Jua&family=Noto+Sans+KR:wght@100&family=Single+Day&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./reset.css" >
     <style>
-        /* 기본 여백 초기화 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Montserrat', 'Noto Sans KR', sans-serif; 
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* --- Header 스타일 --- */
-        header {
+        #container {
             width: 100%;
-            position: fixed;
-            left: 0;
-            top: 0;
-            color: white;
-            transition: color 0.4s;
-            z-index: 100;
-        }
-
-        /* 새로 추가된 배경 블러 레이어 */
-        .header-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 70px;
-            background-color: transparent;
-            transition: background-color 0.4s, backdrop-filter 0.4s;
-            z-index: -1;
-        }
-
-        header.on .header-bg {
-            backdrop-filter: blur(20px);
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-
-        header.on {
-            color: #222;
-        }
-
-        header.on .logo-box img {
-            filter: brightness(0);
-        }
-
-        .header-top {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            height: 70px;
-            padding: 0 50px;
-            position: relative;
+            position: relative; 
         }
 
-        .header-left {
+        #toolbar {
+            width: 100%;
+            height: 70px;
+            background-color: #744d37;
+
             display: flex;
+            justify-content: center;
             align-items: center;
             gap: 20px;
         }
 
-        .logo-box {
-            width: 100px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
+        #toolbar div * {
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            margin-right: 10px;
         }
 
-        .logo-box img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            transition: filter 0.4s;
-        }
-
-        .divider {
-            width: 1px;
-            height: 12px;
-            background-color: currentColor;
-            opacity: 0.5;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            font-weight: 300;
-        }
-
-        /* --- 메인 메뉴 & 서브 메뉴 --- */
-        .main-menu {
-            display: flex;
-            gap: 60px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            height: 70px;
-            transition: gap 0.4s ease;
-        }
-
-        header.expand .main-menu {
-            gap: 120px; 
-        }
-
-        .main-menu > li {
-            position: relative;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .main-tit {
-            display: flex;
-            align-items: center;
-            height: 100%;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .sub-menu {
-            position: absolute;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: max-content;
-            text-align: center;
-            padding-top: 15px;
-            padding-bottom: 30px;
-            display: none;
-        }
-
-        .sub-menu li {
-            margin-bottom: 15px;
-        }
-
-        .sub-menu a {
-            font-size: 14px;
-            font-weight: 400;
-            color: #666;
-            transition: color 0.2s, font-weight 0.2s;
-        }
-
-        .sub-menu a:hover {
-            color: #000;
-            font-weight: 700;
-        }
-
-        .header-right {
-            width: 100px;
-        }
-
-        /* --- 공통 Section 스타일 --- */
-        section {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-        }
-
-        /* --- 공통 텍스트 폰트 스타일 (sec3, sec4 공용) --- */
-
-        .sec-header-wrap {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 40px;
-            margin-left: -50px;
-        }
-
-        .sec-num {
-            font-size: 14px;
-            font-weight: 700;
-            margin-top: 8px;
-            
-        }
-
-        .sec-title {
-            font-size: 42px;
-            font-weight: 700;
-            line-height: 1.1;
-            letter-spacing: -1px;
-        }
-
-        .sec-desc {
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 1.6;
-            color: #666;
-            margin-bottom: 60px;
-            margin-left: -50px;
-            
-            /* background-color: aqua; */
-            width: 600px;
-        }
-
-        .sec-btn {
-            font-size: 12px;
-            font-weight: 700;
-            color: #000;
-            text-decoration: underline;
-            text-underline-offset: 4px;
-            letter-spacing: 0.5px;
-            width: fit-content;
-        }
-
-        /* --- 공통 썸네일 아이템 스타일 --- */
-        .thumb-item {
-            width: 70px;
-            height: 70px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: border 0.3s ease;
-        }
-
-        .thumb-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: blur(2px); 
-            transition: filter 0.3s ease;
-        }
-
-        .thumb-item.active {
-            border: 1px solid #000;
-        }
-
-        .thumb-item.active img,
-        .thumb-item:hover img {
-            filter: blur(0);
-        }
-
-        /* 공통 메인 이미지 박스 */
-        .main-img-box {
-            width: 100%;
-            height: 100%;
-        }
-
-        .main-img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-        }
-
-        /* --- sec1 스타일 --- */
-        .sec1 {
-            background-image: url('https://fmkcos.com/web/upload/appfiles/AIFBrluHGdhkEsW6ewuLoA/11067ee23b1b4bf8148edea03935d5c3.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            justify-content: flex-start;
-            align-items: center;
-            padding-left: 10%;
-        }
-
-        .hero-text {
+        #toolbar button {
+            border: none;
+            background-color: #333;
+            font-weight: bold;
             color: white;
+            padding: 5px 20px;
+            cursor: pointer;
         }
 
-        .hero-text h2 {
-            font-size: 70px;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 20px;
+        #nameInput {
+            padding: 5px 10px;
+            border: none;
+            outline: none;
+            border-radius: 4px;
         }
 
-        .hero-text p {
-            font-size: 18px;
-            font-weight: 300;
+        #canvas {
+            background-color: #255938; 
+            background-image: url('https://blog.kakaocdn.net/dna/cmseu8/btq6Z9KJYXo/AAAAAAAAAAAAAAAAAAAAAJ1luNmhHJ240C2OYRHWfJFK3JPMgT6dyWEsIkGCHGYw/img.jpg?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1782831599&allow_ip=&allow_referer=&signature=4Ct4zIYTvz0uRhNgsiQxOIpBUio%3D');
+            /* background-size: cover; */ 
+            /* background-position: center; */
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>✏️</text></svg>") 0 20, auto;
         }
 
-        /* --- sec2 배너 스타일 --- */
-        .sec2 {
-            height: 50vh;
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .sec2-banner {
-            width: 95%;
-            height: 70%;
-            position: relative;
-            background-image: url('https://fmkcos.com/web/upload/appfiles/AIFBrluHGdhkEsW6ewuLoA/9d6bb64f0ad6b48d5be65b8985c93d46.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            margin-bottom: 50px;
-        }
-
-        .banner-tag-left {
+        #noisy-list {
             position: absolute;
-            top: 30px;
-            left: 40px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            color: #000;
-        }
-
-        .banner-tag-right {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            color: #000;
-        }
-
-        .banner-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            width: 100%;
-        }
-
-        .banner-sub {
-            font-size: 12px;
-            font-weight: 500;
-            color: #000;
-            margin-bottom: 16px;
-            letter-spacing: -0.3px;
-        }
-
-        .banner-main {
+            bottom: 150px;
+            right: 90px;
+            color: white;
+            font-family: "Gaegu", sans-serif;
             font-size: 32px;
-            font-weight: 700;
-            line-height: 1.25;
-            color: #000;
-            margin-bottom: 24px;
-            letter-spacing: -0.5px;
+            text-align: center;
+            
         }
 
-        .banner-btn {
-            font-size: 11px;
-            font-weight: 500;
-            color: #000;
-            text-decoration: underline;
-            text-underline-offset: 4px;
-            letter-spacing: 1px;
+        #noisy-list .title {
+            border-bottom: 2px solid white;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
         }
-
-        .sec2-bottom-title {
-            position: absolute;
-            bottom: 25px;
-            left: 50px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            color: #000;
-        }
-
-        /* --- sec3 제품 디테일 스타일 (좌 텍스트, 우 이미지) --- */
-        .sec3 {
-            background-color: #fff;
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-        }
-
-        .sec3-left {
-            width: 45%;
-            padding: 100px 10% 100px 10%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-        }
-
-        .sec3-thumb-wrap {
-            position: absolute;
-            right: 25px;
-            bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 10;
-        }
-
-        .sec3-right {
-            width: 55%;
-            background-color: #e6e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        /* --- sec4 제품 디테일 스타일 (좌 이미지, 우 텍스트) --- */
-        .sec4 {
-            background-color: #fff;
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-        }
-
-        .sec4-left {
-            width: 55%;
-            background-color: #f1f2f3; /* 밝은 쿨그레이 톤 (필요시 조정) */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .sec4-right {
-            width: 45%;
-            padding: 100px 10% 100px 10%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-        }
-
-        .sec4-thumb-wrap {
-            position: absolute;
-            left: 25px; /* sec3와 다르게 왼쪽에 배치 */
-            bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 10;
-        }
-
-        .hoho{
-            height: 50px;
-        }
-
     </style>
 </head>
 <body>
+       <div id="container">
+            <div id="toolbar">
+                <div>
+                    <label for="strokeColor">색상</label>
+                    <input type="color" id="strokeColor" value="#000" />
 
-    <header>
-        <div class="header-bg"></div> <div class="header-top">
-            <div class="header-left">
-                <div class="logo-box">
-                    <img src="https://fmkcos.com/img/common/fmkcos_logo.svg" alt="FMK">
+                    <label for="lwidth">선굵기</label>
+                    <input type="number" id="lwidth" value="2" min="1" max="50" />
                 </div>
-                <div class="divider"></div>
-                <div class="subtitle">Freeze The Power</div>
-            </div>
 
-            <ul class="main-menu">
-                <li>
-                    <a href="#" class="main-tit">About</a>
-                    <ul class="sub-menu">
-                        <li><a href="#">Brand Story</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="main-tit">Products</a>
-                    <ul class="sub-menu">
-                        <li><a href="#">Rejuvenating</a></li>
-                        <li><a href="#">Brightening</a></li>
-                        <li><a href="#">Set</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="main-tit">Event</a>
-                    <ul class="sub-menu">
-                        <li><a href="#">Event</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="main-tit">Community</a>
-                    <ul class="sub-menu">
-                        <li><a href="#">CS Center</a></li>
-                        <li><a href="#">FAQ</a></li>
-                    </ul>
-                </li>
-            </ul>
-
-            <div class="header-right"></div>
-        </div>
-    </header>
-
-    <section class="sec1">
-        <div class="hero-text">
-            <h2>Advanced results,<br>everyday routine.</h2>
-            <p>전문가의 영역을 당신의 일상 루틴으로 확장합니다.</p>
-        </div>
-    </section>
-
-    <section class="sec2">
-        <div class="sec2-banner">
-            <div class="banner-tag-left">▪ MEMBER BENEFIT | EVENT</div>
-            <div class="banner-tag-right">WELCOME COUPON</div>
-            
-            <div class="banner-content">
-                <p class="banner-sub">신규 회원 가입 시 최대 1만원 쿠폰팩 증정</p>
-                <h3 class="banner-main">New member exclusive<br>welcome coupon!</h3>
-                <a href="#" class="banner-btn">VIEW MORE</a>
-            </div>
-        </div>
-        <div class="sec2-bottom-title">▪ OUR PRODUCT LINE</div>
-    </section>
-
-    <section class="sec3">
-        <div class="sec3-left">
-            <div class="sec-header-wrap">
-                <div class="sec-num">01</div>
-                <h3 class="sec-title">fmk Rejuvenating<br>PDRN kit</h3>
-            </div>
-            
-            <p class="sec-desc">
-                전문가의 영역에서 사용되는 PDRN 부스터의 핵심 효능을 집에서도 경험할 수 있도록<br>
-                설계된 인텐시브 홈케어 키트입니다. 고함량 PDRN 부스팅 케어가<br>
-                피부 중심부터 차오르는 탄력을 완성하고,<br>
-                탄력·결·보습의 밀도를 한층 끌어올려 건강하게 빛나는 피부 컨디션을 선사합니다.
-            </p>
-
-            <a href="#" class="sec-btn">VIEW MORE</a>
-
-            <div class="sec3-thumb-wrap">
-                <div class="thumb-item active" data-target="sec3" data-img="https://fmkcos.com/img/main/img_slide_1-2_complete.png">
-                    <img src="https://fmkcos.com/img/main/img_slide_1-2_complete.png" alt="thumb1">
-                </div>
-                <div class="thumb-item" data-target="sec3" data-img="https://fmkcos.com/img/main/img_slide_1-3.png">
-                    <img src="https://fmkcos.com/img/main/img_slide_1-3.png" alt="thumb2">
-                </div>
-                <div class="thumb-item" data-target="sec3" data-img="https://fmkcos.com/img/main/img_slide_1-4.png">
-                    <img src="https://fmkcos.com/img/main/img_slide_1-4.png" alt="thumb3">
-                </div>
-            </div>
-        </div>
-
-        <div class="sec3-right">
-            <div class="main-img-box">
-                <img src="https://fmkcos.com/img/main/img_slide_1-2_complete.png" alt="main-product" id="main-product-img-sec3">
-            </div>
-        </div>
-    </section>
-
-    <div class="hoho"></div>
-
-    <section class="sec4">
-        <div class="sec4-left">
-            <div class="main-img-box">
-                <img src="https://fmkcos.com/img/main/img_slide_2-2_complete.png" alt="main-product" id="main-product-img-sec4">
-            </div>
-        </div>
-
-        <div class="sec4-right">
-            <div class="sec-header-wrap">
-                <div class="sec-num">02</div>
-                <h3 class="sec-title">fmk Brightening<br>vit+kit</h3>
-            </div>
-            
-            <p class="sec-desc">
-                빛이 자연스럽게 반사되는 투명 광채 브라이트닝 케어를 집에서도 경험할 수 있도록<br>
-                설계된 인텐시브 브라이트닝 키트입니다.<br>
-                비타민C와 NAD·NMN 시너지로 완성된 브라이트닝 부스팅 케어가<br>
-                피부 미백 광채의 밀도를 끌어올려 속부터 맑고 건강하게 빛나는 투명한 피부를 완성합니다.
-            </p>
-
-            <a href="#" class="sec-btn">VIEW MORE</a>
-
-            <div class="sec4-thumb-wrap">
-                <div class="thumb-item active" data-target="sec4" data-img="https://fmkcos.com/img/main/img_slide_2-2_complete.png">
-                    <img src="https://fmkcos.com/img/main/img_slide_2-2_complete.png" alt="thumb1">
-                </div>
-                <div class="thumb-item" data-target="sec4" data-img="https://fmkcos.com/img/main/img_slide_2-3.png">
-                    <img src="https://fmkcos.com/img/main/img_slide_2-3.png" alt="thumb2">
-                </div>
-                <div class="thumb-item" data-target="sec4" data-img="https://fmkcos.com/img/main/img_slide_2-4.png">
-                    <img src="https://fmkcos.com/img/main/img_slide_2-4.png" alt="thumb3">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        $(function(){
-            $("header").on("mouseenter", function(){
-                $(this).addClass("on expand"); 
+                <button id="reset">지우기</button>
+                <button id="downfile">다운로드</button>
                 
-                $(".sub-menu").css("display", "block");
-                let maxSubHeight = 0;
-                $(".sub-menu").each(function(){
-                    if($(this).outerHeight() > maxSubHeight) {
-                        maxSubHeight = $(this).outerHeight();
-                    }
-                });
-                $(".sub-menu").css("display", "none");
+                <input type="text" id="nameInput" placeholder="이름 입력하기" />
+                <button id="addNameBtn">추가</button>
+            </div>
+            
+            <canvas id="canvas"></canvas>
 
-                $(".sub-menu").stop().slideDown(300); 
-                $(".header-bg").stop().animate({height: 70 + maxSubHeight + "px"}, 300);
-            });
+            <div id="noisy-list">
+                <div class="title">떠든 사람</div>
+                <div id="nameContainer"></div>
+            </div>
+       </div>
 
-            $("header").on("mouseleave", function(){
-                $(this).removeClass("expand"); 
-                $(".sub-menu").stop().slideUp(200); 
-                $(".header-bg").stop().animate({height: "70px"}, 200); 
-                
-                if($(window).scrollTop() <= 80){
-                    $(this).removeClass("on");
+      <script>
+            const canvas = document.querySelector("canvas");
+            const toolbar = document.getElementById("toolbar");
+            const nameInput = document.getElementById("nameInput");
+            const nameContainer = document.getElementById("nameContainer");
+            const addNameBtn = document.getElementById("addNameBtn"); // 추가 버튼 변수 생성
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - toolbar.offsetHeight;
+
+            let canvasOffsetX = canvas.offsetLeft;
+            let canvasOffsetY = canvas.offsetTop;
+
+            let isDrawing = false;
+
+            let startX;
+            let startY;
+            let lineWidth = 2;
+
+            const ctx = canvas.getContext("2d");
+
+            toolbar.addEventListener("change", function(e){
+                if(e.target.id === "strokeColor"){
+                    ctx.strokeStyle = e.target.value;
+                }
+
+                if(e.target.id === 'lwidth'){
+                    lineWidth = e.target.value;
                 }
             });
 
-            $(window).on("scroll", function(){
-                let scrTop = $(window).scrollTop();
-                
-                if(!$("header").hasClass("expand")) {
-                    if(scrTop > 80){
-                        $("header").addClass("on");
-                    }else{
-                        $("header").removeClass("on");
-                    }
+            canvas.addEventListener("mousedown", function(e){
+                isDrawing = true;
+                startX = e.clientX;
+                startY = e.clientY;
+            });
+
+            canvas.addEventListener("mousemove", function(e){
+                if(!isDrawing) return;
+                ctx.lineWidth = lineWidth;
+                ctx.lineCap = 'round';
+                ctx.lineTo(e.clientX, e.clientY - canvasOffsetY);
+                ctx.stroke();
+            });
+
+            canvas.addEventListener("mouseup", function(){
+                isDrawing = false;
+                ctx.beginPath();
+            });
+
+            toolbar.addEventListener("click", function(e){
+                if(e.target.id === "reset"){
+                    ctx.clearRect(0,0,canvas.width, canvas.height);
                 }
             });
 
-            // 썸네일 클릭 이벤트 (sec3, sec4 독립적으로 작동하도록 업데이트)
-            $('.thumb-item').on('click', function() {
-                // 어떤 섹션의 썸네일인지 판별
-                let targetSec = $(this).attr('data-target');
-                
-                // 해당 섹션의 썸네일만 active 클래스 제거 및 추가
-                $('.thumb-item[data-target="' + targetSec + '"]').removeClass('active');
-                $(this).addClass('active');
-                
-                // 해당 섹션의 메인 이미지 변경
-                let targetImgUrl = $(this).attr('data-img');
-                $('#main-product-img-' + targetSec).attr('src', targetImgUrl);
+            toolbar.addEventListener("click", function(e){
+                if(e.target.id === "downfile"){
+                    let link = document.createElement("a");
+                    link.download = "drawing.png"; 
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                }
             });
-        });
-    </script>
+
+            function addNoisyPerson() {
+                const nameValue = nameInput.value.trim();
+                if (nameValue !== "") {
+                    const newName = document.createElement("div");
+                    newName.textContent = nameValue;
+                    nameContainer.appendChild(newName);
+                    
+                    nameInput.value = ""; 
+                    nameInput.focus(); 
+                }
+            }
+
+            addNameBtn.addEventListener("click", addNoisyPerson);
+
+      </script>
 </body>
 </html>
